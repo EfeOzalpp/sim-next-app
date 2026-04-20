@@ -2,6 +2,7 @@
 
 _This is the website of the Studio for Interrelated Media (SIM) program at the Massachusetts College for Art and Design (MassArt)._
 
+
 # History
 
 The first website for SIM was developed by Matt Karl.
