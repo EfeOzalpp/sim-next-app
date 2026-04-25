@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
-import { getThursday } from "../../../actions";
+import { getThursday } from "@/actions/thursdays";
 
-import ThursdayCard from "../../../components/ThursdayCard";
+import ThursdayCard from "@/components/domain/thursdays/ThursdayCard";
 
 export default async function Thursday({ params }) {
 	// Get the user data of the user you are looking at.

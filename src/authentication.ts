@@ -6,7 +6,21 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/database";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+	trustHost: true,
+	debug: process.env.NODE_ENV === "development",
 	adapter: PrismaAdapter(prisma),
+	session: { strategy: "jwt" },
+	cookies: {
+		sessionToken: {
+			name: "sim_session",
+			options: {
+				httpOnly: true,
+				sameSite: "lax",
+				path: "/",
+				secure: process.env.NODE_ENV === "production",
+			},
+		},
+	},
 	providers: [
 		Google({
 			clientId: process.env.AUTH_GOOGLE_ID!,
@@ -19,91 +33,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		}),
 	],
 	callbacks: {
-		async signIn({ user, account }) {
-			// Add a check for account being non-null
-			if (!account) {
-				console.error("Account is null or undefined");
-				return false; // Prevent further execution if account is invalid
+		async jwt({ token, user }) {
+			// On initial sign in, user object is available
+			if (user) {
+				token.id = user.id;
 			}
 
-			let defaultSemester;
-			const firstSemester = await prisma.semester.findFirst({
-				include: { thursdays: { include: { groups: true } }, users: true },
-			});
-
-			if (firstSemester) {
-				defaultSemester = firstSemester;
-			} else {
-				defaultSemester = { id: "" };
-			}
-
-			const email = user.email as string;
-
-			const isUserFound = await prisma.user.findFirst({ where: { email: email }, include: { accounts: true } });
-
-			if (isUserFound?.accounts.length == 0) {
-				try {
-					await prisma.user.update({
-						where: {
-							// Check if the user already exists by email.
-							email: email,
-						},
-						data: {
-							accounts: {
-								create: {
-									type: account.type,
-									provider: account.provider,
-									providerAccountId: account.providerAccountId,
-									access_token: account.access_token,
-									refresh_token: account.refresh_token,
-									expires_at: account.expires_at,
-								},
-							},
-							semesters: { connect: { id: defaultSemester.id } },
-						},
-					});
-				} catch (error) {
-					console.error("ERROR:", error);
-					// Deny sign in.
-					return false;
-				}
-			}
-
-			// Allow sign in.
-			return true;
-		},
-		async jwt({ token }) {
 			if (!token.email) return token;
 
-			const dbUser = await prisma.user.findUnique({
-				where: { email: token.email },
-				select: {
-					id: true,
-					admin: true,
-				},
-			});
-
-			if (dbUser) {
-				token.id = dbUser.id;
-				token.admin = dbUser.admin;
-			}
-
-			return token;
-		},
-
-		async session({ session, token }) {
-			if (!session?.user) return session;
-
-			if (token?.email) {
+			try {
 				const dbUser = await prisma.user.findUnique({
 					where: { email: token.email },
-					select: { id: true, admin: true },
+					select: {
+						id: true,
+						admin: true,
+						username: true,
+					},
 				});
 
 				if (dbUser) {
-					session.user.id = dbUser.id;
-					session.user.admin = dbUser.admin;
+					token.id = dbUser.id;
+					token.admin = dbUser.admin;
+					token.username = dbUser.username;
 				}
+			} catch (error) {
+				console.error("JWT Callback Error:", error);
+			}
+
+			// Clean up token to keep it small - ONLY essential fields
+			const cleanToken = {
+				id: (token.id as string) || (token.sub as string),
+				email: token.email as string,
+				name: token.name as string,
+				picture: token.picture as string,
+				admin: token.admin as boolean,
+				username: token.username as string,
+			};
+			
+			return cleanToken;
+		},
+
+		async session({ session, token }) {
+			if (session?.user && token) {
+				session.user.id = token.id as string;
+				session.user.admin = token.admin as boolean;
+				session.user.username = token.username as string;
+				session.user.name = token.name as string;
+				session.user.image = token.picture as string;
 			}
 
 			return session;

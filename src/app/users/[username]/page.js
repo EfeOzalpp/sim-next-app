@@ -1,11 +1,13 @@
-import { getUser, getCurrentUser } from "../../../actions";
+import { getUser } from "@/actions/users";
+import { getCurrentUser } from "@/actions/auth";
 import { notFound, redirect } from "next/navigation";
-import Button from "@/components//Button";
-import styles from "../../../components/users/User.module.css";
-import Header from "@/components/Header";
+import { Button } from "@/components/ui/AntD";
+import Split from "@/components/ui/Split";
+import styles from "@/components/domain/users/User.module.css";
 import Link from "next/link";
-import { LogoutButton } from "@/components/AuthenticationButtons";
-import Presentation from "@/components/PresentationCard";
+import { LogoutButton } from "@/components/layout/Auth/AuthenticationButtons";
+import Presentation from "@/components/domain/thursdays/PresentationCard";
+import { normalizeFaceImagePath } from "@/helpers";
 
 export default async function User({ params }) {
 	const { username } = await params;
@@ -20,25 +22,28 @@ export default async function User({ params }) {
 	return (
 		<div className={styles.UserTable}>
 			<div className={styles.UserImage}>
-				<img src={user.image} alt={`${user.name}'s image`} />
+				<img src={normalizeFaceImagePath(user.image)} alt={`${user.name}'s image`} />
 			</div>
 
 			<div>
-				<Header
-					label={
+				<Split
+					start={
 						<div style={{ fontWeight: "bolder", fontSize: "2rem" }}>
 							{user.name}
 							{user.admin ? " ✨" : null}
 						</div>
 					}
-				>
-					{canEdit && (
-						<Button href={`./${user.username}/edit`} className={styles.EditButton}>
-							Edit Profile
-						</Button>
-					)}
-					{user.id === currentUser.id ? <LogoutButton /> : null}
-				</Header>
+					end={
+						<>
+							{canEdit && (
+								<Button href={`./${user.username}/edit`} className={styles.EditButton}>
+									Edit Profile
+								</Button>
+							)}
+							{user.id === currentUser.id ? <LogoutButton /> : null}
+						</>
+					}
+				/>
 
 				<div className={styles.UserData}>
 					<div className={styles.DataRow}>

@@ -1,20 +1,15 @@
-import SemesterForm from "../../../../components/admin/semesters/SemesterForm";
+import SemesterForm from "@/components/forms/semester/SemesterForm";
 
-import { getAllSemesters, getAllUsers, addSemester } from "../../../../actions";
+import { getAllSemesters, addSemester } from "@/actions/semesters";
+import { getAllUsers } from "@/actions/users";
 import { redirect } from "next/navigation";
 
 export default async function AddSemester() {
 	const semesters = await getAllSemesters();
 
 	const usersFromCurrentSemester = semesters[0].users;
-	usersFromCurrentSemester.map((user) => {
-		user.key = user.id;
-	});
 
 	const users = await getAllUsers();
-	users.map((user) => {
-		user.key = user.id;
-	});
 
 	return (
 		<div>
@@ -39,8 +34,8 @@ function generateThursdays(dates) {
 	let day = new Date(dates[0].setDate(dates[0].getDate() - 1));
 
 	while (day <= dates[1]) {
-		if (day.getDay() == 3) {
-			thursdays.push(day);
+		if (day.getDay() == 4) {
+			thursdays.push(new Date(day));
 		}
 
 		var newDay = day.setDate(day.getDate() + 1);

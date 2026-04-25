@@ -1,6 +1,8 @@
-import SemesterForm from "../../../../../components/admin/semesters/SemesterForm";
+import SemesterForm from "@/components/forms/semester/SemesterForm";
 
-import { getSemester, getAllUsers, editSemester } from "../../../../../actions";
+import { getSemester, editSemester, removeSemester } from "@/actions/semesters";
+import { getAllUsers } from "@/actions/users";
+import { isCurrentUserAdmin } from "@/actions/auth";
 import { redirect } from "next/navigation";
 
 export default async function EditSemester({ params }) {
@@ -8,20 +10,30 @@ export default async function EditSemester({ params }) {
 	const semester = await getSemester(id);
 
 	const users = await getAllUsers();
-	users.map((user) => {
-		user.key = user.id;
-	});
+	const isAdmin = await isCurrentUserAdmin();
+
+	async function onSubmitEditSemester(data) {
+		"use server";
+		await editSemester({ ...data, id });
+		redirect("/admin");
+	}
+
+	async function onRemoveSemester(data) {
+		"use server";
+		await removeSemester(data);
+		redirect("/admin");
+	}
 
 	return (
 		<div>
 			<h1>Edit Semester</h1>
-			<SemesterForm onSubmit={onSubmitEditSemester} semester={semester} users={users} />
+			<SemesterForm 
+				onSubmit={onSubmitEditSemester} 
+				onRemove={onRemoveSemester}
+				semester={semester} 
+				users={users} 
+				isCurrentUserAdmin={isAdmin}
+			/>
 		</div>
 	);
-}
-
-async function onSubmitEditSemester(data) {
-	"use server";
-	editSemester(data);
-	redirect("/admin");
 }

@@ -1,0 +1,79 @@
+/* ---------- PAGE LAYOUT ---------- */
+
+.UserTable {
+	display: grid;
+	grid-template-columns: 260px 1fr; /* left: photo, right: content */
+	gap: 3rem;
+	align-items: start;
+	padding: 2.5rem 3rem;
+	max-width: 1100px;
+	margin: 0 auto;
+}
+
+/* Mobile: stack everything */
+@media (max-width: 992px) {
+	.UserTable {
+		grid-template-columns: 1fr;
+		padding: 1.5rem;
+		gap: 2rem;
+	}
+}
+
+/* ---------- IMAGE ---------- */
+
+.UserImage {
+	display: flex;
+	justify-content: center;
+}
+
+.UserImage img {
+	width: 100%; /* take full width of column */
+	aspect-ratio: 1 / 1.4; /* maintain rect */
+	object-fit: cover;
+	border-radius: 5px;
+	border: 3px solid #033; /* black outline */
+}
+
+/* Smaller photo on mobile */
+@media (max-width: 992px) {
+	.UserImage img {
+		width: 100%; /* take full width of mobile container */
+		max-width: 260px; /* optional max */
+	}
+}
+
+/* ---------- USER DATA ---------- */
+
+.UserData {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	margin-top: 1rem;
+}
+
+.DataRow {
+	display: flex;
+	flex-direction: column;
+}
+
+.Label {
+	font-weight: 900; /* bolder */
+	font-size: 1.15rem;
+	color: hsl(0, 0%, 20%);
+}
+
+.Value {
+	padding: 0.25rem; /* spacing from label */
+	color: #222;
+
+	/* NEW: stack WorkCards vertically */
+	display: flex;
+	flex-direction: column;
+}
+
+.Value > * {
+	margin-top: 0.75rem;
+
+	/* Make WorkCard fill the Value container width */
+	width: 100%;
+}

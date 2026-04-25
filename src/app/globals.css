@@ -7,4 +7,68 @@ body {
 	background: linear-gradient(white, whitesmoke);
 	background-attachment: fixed;
 	color: #1a120b;
+
+	--neo-border: 2px solid #222222;
+	--neo-shadow-color: #222222;
+	--neo-depth: 2px;
+	--neo-radius: 5px;
+	--neo-color-text: #1a120b;
+	--neo-color-orange: #f26419;
+	--neo-color-orange-light: #f58a2a;
+	--neo-color-white: whitesmoke;
+	--neo-color-grey: lightgrey;
+	--neo-bg-orange: linear-gradient(var(--neo-color-orange-light), var(--neo-color-orange));
+	--neo-bg-white: linear-gradient(var(--neo-color-white), var(--neo-color-grey));
 }
+
+.neo-brutal {
+	position: relative;
+	border: var(--neo-border) !important;
+	border-radius: var(--neo-radius) !important;
+	box-shadow: 0 var(--neo-depth) 0 0 var(--neo-shadow-color) !important;
+	transform: translateY(calc(-1 * var(--neo-depth)));
+	background: var(--neo-bg-orange);
+	color: white;
+	font-weight: bold;
+}
+
+.neo-pressable {
+	cursor: pointer;
+	transition: all 0.05s ease !important;
+}
+
+.neo-pressable:active,
+.neo-pressable.pressed {
+	transform: translateY(0) !important;
+	box-shadow: 0 0 0 0 var(--neo-shadow-color) !important;
+}
+
+.neo-brutal-input {
+	background: var(--neo-bg-white) !important;
+	color: #222 !important;
+	cursor: text;
+}
+
+.neo-transfer .ant-transfer-list {
+	border: var(--neo-border) !important;
+	border-radius: var(--neo-radius) !important;
+}
+
+.neo-table .ant-table {
+	background: transparent !important;
+}
+
+.neo-table .ant-table-thead > tr > th {
+	background: var(--neo-bg-white) !important;
+	border-bottom: var(--neo-border) !important;
+	font-weight: bold !important;
+}
+
+.neo-table .ant-table-tbody > tr > td {
+	border-bottom: 1px solid #ddd !important;
+}
+
+.neo-table .ant-table-tbody > tr:last-child > td {
+	border-bottom: none !important;
+}
+

@@ -10,19 +10,19 @@ async function main() {
 
 	await prisma.user.create({
 		data: {
-			name: "",
-			username: "",
-			email: "",
+			name: "Anthony Ochoa Fader",
+			username: "aeochoafader",
+			email: "aeochoafader@gmail.com",
 			admin: true,
-			image: "/faces/default.jpg",
-			pronouns: "",
-			link: "",
+			image: "/face.jpg",
+			pronouns: "(they/them)",
+			link: "https://massartsim.fun/",
 		},
 	});
 
 	await prisma.semester.create({
 		data: {
-			name: "SP25",
+			name: "Default",
 			thursdays: {
 				create: [
 					{
@@ -40,104 +40,6 @@ async function main() {
 					{
 						date: "2025-01-30T00:00:00.000Z",
 						name: "Small Group Day",
-					},
-					{
-						date: "2025-02-06T00:00:00.000Z",
-						name: "Big Group Day",
-						groups: {
-							create: [
-								{
-									name: "Big Group",
-									location: "Pozen Center",
-								},
-							],
-						},
-					},
-					{
-						date: "2025-02-13T00:00:00.000Z",
-						name: "Small Group Day",
-					},
-					{
-						date: "2025-02-20T00:00:00.000Z",
-						name: "Big Group Day",
-						groups: {
-							create: [
-								{
-									name: "Big Group",
-									location: "Pozen Center",
-								},
-							],
-						},
-					},
-					{
-						date: "2025-02-27T00:00:00.000Z",
-						name: "Small Group Day",
-					},
-					{
-						date: "2025-03-13T00:00:00.000Z",
-						name: "Small Group Day",
-					},
-					{
-						date: "2025-03-20T00:00:00.000Z",
-						name: "Big Group Day",
-						groups: {
-							create: [
-								{
-									name: "Big Group",
-									location: "Pozen Center",
-								},
-							],
-						},
-					},
-
-					{
-						date: "2025-04-03T00:00:00.000Z",
-						name: "Small Group Day",
-					},
-					{
-						date: "2025-04-10T00:00:00.000Z",
-						name: "Big Group Day",
-						groups: {
-							create: [
-								{
-									name: "Big Group",
-									location: "Pozen Center",
-								},
-							],
-						},
-					},
-					{
-						date: "2025-04-17T00:00:00.000Z",
-						name: "Big Group Day",
-						groups: {
-							create: [
-								{
-									name: "Big Group",
-									location: "Pozen Center",
-								},
-							],
-						},
-					},
-
-					{
-						date: "2025-04-25T00:00:00.000Z",
-						name: "Small Group Day",
-					},
-					{
-						date: "2025-05-01T00:00:00.000Z",
-						name: "Small Group Day",
-					},
-					{
-						date: "2025-05-08T00:00:00.000Z",
-						name: "Big Group Day",
-						groups: {
-							create: [
-								{
-									name: "Big Group",
-									location: "Pozen Center",
-								},
-							],
-						},
 					},
 				],
 			},

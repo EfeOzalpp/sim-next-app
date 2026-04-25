@@ -77,7 +77,7 @@ sudo -u postgres psql
 
 yarn prisma migrate deploy
 yarn prisma db seed
-yarn prisma init
+yarn prisma generate 
 
 # 7. Build the frontend
 yarn build

@@ -1,11 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 
-import UserForm from "../../../../components/users/UserForm";
-import Button from "@/components//Button";
+import UserForm from "@/components/forms/user/UserForm";
 
 import { auth } from "@/authentication";
 
-import { handleImageUpload, getUser, editUser, removeUser, getCurrentUser } from "../../../../actions";
+import { handleImageUpload, getUser, editUser, removeUser } from "@/actions/users";
+import { getCurrentUser } from "@/actions/auth";
 
 export default async function EditUser({ params }) {
 	const { username } = await params;
@@ -23,19 +23,8 @@ export default async function EditUser({ params }) {
 			<h1>{user.name}</h1>
 			<div>
 				<h2>Edit User</h2>
-				<UserForm onSubmit={onSubmitEditUser} user={user} isCurrentUserAdmin={isAdmin} />
+				<UserForm onSubmit={onSubmitEditUser} onRemove={onSubmitRemoveUser} user={user} isCurrentUserAdmin={isAdmin} />
 			</div>
-			<br />
-			{currentUser.admin == true ? (
-				<div>
-					<h2>Remove User</h2>
-					<p>This permanently removes the data of this user from the database altogether.</p>
-					<p>
-						If you want to unlist this user from a semester but keep their data in the database, go to the admin dashboard and edit the semester that you want
-						to unlist this user from.
-					</p>
-				</div>
-			) : null}
 		</div>
 	);
 }
@@ -43,11 +32,13 @@ export default async function EditUser({ params }) {
 async function onSubmitEditUser(data) {
 	"use server";
 
-	let image_path = null;
+	let image_path = data.image;
 
-	if (data.image && typeof data.image === "object") {
-		image_path = await handleImageUpload(data.image, data.username, "faces");
+	if (data.image && typeof data.image === "object" && data.image.size > 0) {
+		image_path = await handleImageUpload(data.image);
 		data.image = image_path;
+	} else if (typeof data.image === "string" && data.image.startsWith("data:")) {
+		// Already base64
 	}
 
 	await editUser(data);

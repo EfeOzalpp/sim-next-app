@@ -1,13 +1,11 @@
-import { getFilteredUsers } from "../../actions";
+import { getFilteredUsers } from "@/actions/users";
+import { getAllSemesters } from "@/actions/semesters";
+import { Button } from "@/components/ui/AntD";
+import { FilterInput, FilterSelect } from "@/components/ui/Filters";
+import Split from "@/components/ui/Split";
 
-import { getAllSemesters } from "../../actions";
-import Header from "@/components/Header";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import Select from "@/components/Select";
-
-import styles from "../../components/users/Users.module.css";
-import UserCard from "../../components/users/UserCard";
+import styles from "@/components/domain/users/Users.module.css";
+import UserCard from "@/components/domain/users/UserCard";
 
 import { auth } from "@/authentication";
 
@@ -19,11 +17,16 @@ export default async function Users({ searchParams }) {
 	const isAdmin = session?.user?.admin ?? false;
 	return (
 		<>
-			<Header label={<h2>Names & Faces</h2>}>
-				{isAdmin && <Button href="/users/add">New User</Button>}
-				<Input query={"user"} />
-				<Select filter={"semester"} options={semesters} defaultValue={filters?.semester ?? null} />
-			</Header>
+			<Split
+				start={<h2>Names & Faces</h2>}
+				end={
+					<>
+						{isAdmin && <Button href="/users/add">New User</Button>}
+						<FilterInput query={"user"} />
+						<FilterSelect filter={"semester"} options={semesters} defaultValue={filters?.semester ?? null} />
+					</>
+				}
+			/>
 			<div
 				style={{
 					margin: "1rem",
