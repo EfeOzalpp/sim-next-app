@@ -2,7 +2,9 @@ import { notFound, redirect } from "next/navigation";
 
 import ThursdayForm from "../../../../components/thursdays/ThursdayForm";
 
-import { getThursday, getAllGroups, getAllSemesters, editThursday } from "../../../../actions";
+import { getAllGroups } from "@/server/general";
+import { getThursday, getAllSemesters } from "@/server/shared";
+import { editThursday } from "@/server/admin";
 
 export default async function EditThursday({ params }) {
 	const { thursday_id } = await params;

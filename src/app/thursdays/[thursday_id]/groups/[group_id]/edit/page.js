@@ -2,7 +2,9 @@ import { notFound, redirect } from "next/navigation";
 
 import GroupForm from "../../../../../../components/thursdays/groups/GroupForm";
 
-import { getGroup, getAllUsers, getAllWorks, getAllSemesters, editGroup } from "../../../../../../actions";
+import { getAllUsers, getAllWorks } from "@/server/general";
+import { getGroup, getAllSemesters } from "@/server/shared";
+import { editGroup } from "@/server/admin";
 
 export default async function EditGroup({ params }) {
 	const { group_id } = await params;

@@ -3,7 +3,7 @@ import styles from "./thursdays/thursdaycard.module.css";
 import Button from "./Button";
 import Header from "./Header";
 import GroupCard from "./GroupCard";
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 
 export default async function ThursdayCard({ thursday }) {
 	const session = await auth();

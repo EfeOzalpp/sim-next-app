@@ -1,6 +1,6 @@
 "use client";
 
-import { logIn, logOut } from "@/actions/authenticate";
+import { logIn, logOut } from "@/server/auth/actions";
 
 import Button from "@/components/Button";
 

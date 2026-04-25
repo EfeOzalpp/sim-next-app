@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getThursday } from "../../../actions";
+import { getThursday } from "@/server/shared";
 
 import ThursdayCard from "../../../components/ThursdayCard";
 

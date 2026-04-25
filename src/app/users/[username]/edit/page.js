@@ -3,9 +3,12 @@ import { notFound, redirect } from "next/navigation";
 import UserForm from "../../../../components/users/UserForm";
 import Button from "@/components//Button";
 
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 
-import { handleImageUpload, getUser, editUser, removeUser, getCurrentUser } from "../../../../actions";
+import { handleImageUpload, editUser } from "@/server/general";
+import { getUser } from "@/server/shared";
+import { getCurrentUser } from "@/server/auth/context";
+import { removeUser } from "@/server/admin";
 
 export default async function EditUser({ params }) {
 	const { username } = await params;

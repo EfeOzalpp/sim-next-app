@@ -1,7 +1,6 @@
 import styles from "../../components/thursdays/thursdays.module.css";
 import Button from "@/components//Button";
-import { getFilteredThursdays } from "../../actions";
-import { getAllSemesters } from "../../actions";
+import { getFilteredThursdays, getAllSemesters } from "@/server/shared";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Select from "@/components/Select";

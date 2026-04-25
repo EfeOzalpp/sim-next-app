@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "@/authentication";
+import { signIn, signOut } from "@/server/auth/config";
 
 export async function logIn() {
 	await signIn("google");

@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import UserForm from "@/components/users/UserForm";
-import { addUser, handleImageUpload } from "../../../actions";
+import { handleImageUpload } from "@/server/general";
+import { addUser } from "@/server/admin";
 import path from "path";
 import { copyFile } from "fs/promises";
 
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 
 export default async function AddUser() {
 	const session = await auth();

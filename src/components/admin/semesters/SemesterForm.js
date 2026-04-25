@@ -29,7 +29,7 @@ export default function SemesterForm({ onSubmit, semester, usersFromCurrentSemes
 	};
 	return (
 		<FormWrapper
-			action={(formData) => {
+			action={async (formData) => {
 				const data = {
 					name: formData.get("name"),
 					dates: [dates[0].$d, dates[1].$d],
@@ -38,7 +38,7 @@ export default function SemesterForm({ onSubmit, semester, usersFromCurrentSemes
 				if (semester) {
 					data.id = semester.id;
 				}
-				onSubmit(data);
+				await onSubmit(data);
 			}}
 			button={semester ? "Edit Semester" : "Add Semester"}
 		>

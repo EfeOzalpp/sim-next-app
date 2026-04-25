@@ -1,7 +1,8 @@
 // import styles
 import styles from "../../components/admin/semesters/semesters.module.css";
 import Link from "next/link";
-import { getFilteredUsers, getAllSemesters, getSemesterFromName, getFilteredThursdays } from "../../actions";
+import { getFilteredUsers, getAllSemesters, getFilteredThursdays } from "@/server/shared";
+import { getSemesterFromName } from "@/server/general";
 
 import Header from "../../components/Header";
 

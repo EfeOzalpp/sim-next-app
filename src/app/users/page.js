@@ -1,6 +1,4 @@
-import { getFilteredUsers } from "../../actions";
-
-import { getAllSemesters } from "../../actions";
+import { getFilteredUsers, getAllSemesters } from "@/server/shared";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -9,7 +7,7 @@ import Select from "@/components/Select";
 import styles from "../../components/users/Users.module.css";
 import UserCard from "../../components/users/UserCard";
 
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 
 export default async function Users({ searchParams }) {
 	const filters = await searchParams;

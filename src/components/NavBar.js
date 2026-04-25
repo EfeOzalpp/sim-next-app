@@ -2,7 +2,7 @@ import styles from "./NavBar.module.css";
 import Button from "@/components/Button";
 import NavSelect from "./NavSelect";
 
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 
 export default async function NavBar() {
 	const session = await auth();

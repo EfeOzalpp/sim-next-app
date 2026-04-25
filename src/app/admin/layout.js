@@ -1,4 +1,4 @@
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 
 export default async function AdminLayout({ children }) {
 	const session = await auth();

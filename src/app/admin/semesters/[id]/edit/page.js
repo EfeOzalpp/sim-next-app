@@ -1,6 +1,7 @@
 import SemesterForm from "../../../../../components/admin/semesters/SemesterForm";
 
-import { getSemester, getAllUsers, editSemester } from "../../../../../actions";
+import { getSemester, getAllUsers } from "@/server/general";
+import { editSemester } from "@/server/admin";
 import { redirect } from "next/navigation";
 
 export default async function EditSemester({ params }) {
@@ -22,6 +23,6 @@ export default async function EditSemester({ params }) {
 
 async function onSubmitEditSemester(data) {
 	"use server";
-	editSemester(data);
+	await editSemester(data);
 	redirect("/admin");
 }

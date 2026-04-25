@@ -1,4 +1,5 @@
-import { getUser, getCurrentUser } from "../../../actions";
+import { getUser } from "@/server/shared";
+import { getCurrentUser } from "@/server/auth/context";
 import { notFound, redirect } from "next/navigation";
 import Button from "@/components//Button";
 import styles from "../../../components/users/User.module.css";

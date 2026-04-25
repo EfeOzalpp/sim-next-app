@@ -1,6 +1,8 @@
 import SemesterForm from "../../../../components/admin/semesters/SemesterForm";
 
-import { getAllSemesters, getAllUsers, addSemester } from "../../../../actions";
+import { getAllSemesters } from "@/server/shared";
+import { getAllUsers } from "@/server/general";
+import { addSemester } from "@/server/admin";
 import { redirect } from "next/navigation";
 
 export default async function AddSemester() {
@@ -27,7 +29,7 @@ export default async function AddSemester() {
 async function onSubmitAddSemester(data) {
 	"use server";
 	data.dates = generateThursdays(data.dates);
-	addSemester(data);
+	await addSemester(data);
 	redirect("/admin");
 }
 

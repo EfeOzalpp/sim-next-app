@@ -3,7 +3,7 @@ import styles from "./thursdays/thursdaycard.module.css";
 import Button from "./Button";
 import Header from "./Header";
 import PresentationCard from "./PresentationCard";
-import { auth } from "@/authentication";
+import { auth } from "@/server/auth/config";
 export default async function GroupCard({ thursday, group }) {
 	const session = await auth();
 	var producers = group.producers.filter((user) => user.admin === false);

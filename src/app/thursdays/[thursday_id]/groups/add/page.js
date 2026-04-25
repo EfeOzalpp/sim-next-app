@@ -1,6 +1,8 @@
 import GroupForm from "../../../../../components/thursdays/groups/GroupForm";
 
-import { getAllUsers, getAllWorks, getAllSemesters, addGroup, getThursday } from "../../../../../actions";
+import { getAllUsers, getAllWorks } from "@/server/general";
+import { getAllSemesters, getThursday } from "@/server/shared";
+import { addGroup } from "@/server/admin";
 import { redirect } from "next/navigation";
 
 export default async function AddGroup({ params }) {

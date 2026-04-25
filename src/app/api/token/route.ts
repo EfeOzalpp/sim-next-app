@@ -1,6 +1,6 @@
 // /app/api/token/route.ts
-import { auth } from "@/authentication";
-import { prisma } from "../../../database";
+import { auth } from "@/server/auth/config";
+import { prisma } from "@/server/database";
 import { NextResponse } from "next/server";
 
 export async function GET() {
