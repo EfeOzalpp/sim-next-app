@@ -1,5 +1,4 @@
 import Block from "..//Block";
-import Image from "next/image";
 import styles from "./UserCard.module.css";
 
 export default function UserCard({ user }) {
@@ -7,10 +6,9 @@ export default function UserCard({ user }) {
 		<Block as="a" href={`/users/${user.username}`} className={user.admin ? styles.UserCardAdmin : styles.UserCard}>
 			<div className={`${styles.faceContent}`}>
 				<div className={styles.imageWrapper}>
-					<Image
+					<img
 						src={user.image}
 						alt={`${user.name}'s face`}
-						fill
 						style={{
 							objectFit: "cover",
 							borderRadius: "5px",
