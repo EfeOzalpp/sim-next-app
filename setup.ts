@@ -45,7 +45,10 @@ async function setup() {
   const getEnvValue = (key: string) => {
     const match = envContent.match(new RegExp(`^${key}=(.*)$`, "m"));
     if (!match) return "";
-    return match[1].trim().replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
+    return match[1]
+      .trim()
+      .replace(/^"(.*)"$/, "$1")
+      .replace(/^'(.*)'$/, "$1");
   };
 
   // Sync existing .env values with process.env
@@ -99,8 +102,11 @@ async function setup() {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!semesterStart) {
       while (!semesterStart || !dateRegex.test(semesterStart)) {
-        semesterStart = await question("Enter semester start date (YYYY-MM-DD): ");
-        if (!dateRegex.test(semesterStart)) console.log("⚠️ Invalid date format. Please use YYYY-MM-DD.");
+        semesterStart = await question(
+          "Enter semester start date (YYYY-MM-DD): ",
+        );
+        if (!dateRegex.test(semesterStart))
+          console.log("⚠️ Invalid date format. Please use YYYY-MM-DD.");
       }
       updateEnv("INITIAL_SEMESTER_START", semesterStart);
     }
@@ -108,7 +114,8 @@ async function setup() {
     if (!semesterEnd) {
       while (!semesterEnd || !dateRegex.test(semesterEnd)) {
         semesterEnd = await question("Enter semester end date (YYYY-MM-DD): ");
-        if (!dateRegex.test(semesterEnd)) console.log("⚠️ Invalid date format. Please use YYYY-MM-DD.");
+        if (!dateRegex.test(semesterEnd))
+          console.log("⚠️ Invalid date format. Please use YYYY-MM-DD.");
       }
       updateEnv("INITIAL_SEMESTER_END", semesterEnd);
     }
@@ -149,10 +156,13 @@ async function setup() {
 
   while (!isConnected) {
     console.log(`\nDatabase URL: ${dbUrl || "Not set"}`);
-    
+
     if (dbUrl) {
       console.log("Checking database connection...");
-      const pool = new Pool({ connectionString: dbUrl, connectionTimeoutMillis: 5000 });
+      const pool = new Pool({
+        connectionString: dbUrl,
+        connectionTimeoutMillis: 5000,
+      });
       try {
         await pool.query("SELECT 1");
         console.log("✅ Database connection successful!");
@@ -174,7 +184,9 @@ async function setup() {
           updateEnv("DATABASE_URL", dbUrl);
         }
       } else if (dbUrl) {
-        const proceedAnyway = await question("Proceed with setup anyway? (y/n): ");
+        const proceedAnyway = await question(
+          "Proceed with setup anyway? (y/n): ",
+        );
         if (proceedAnyway.toLowerCase() === "y") break;
       } else {
         console.log("DATABASE_URL is required to proceed.");
@@ -190,8 +202,10 @@ async function setup() {
   // Run Prisma commands to sync schema and seed data
   console.log("\nSetting up the database...");
   try {
-    console.log("Synchronizing database schema...");
-    execSync("npx prisma db push", { stdio: "inherit" });
+    console.log(
+      "Synchronizing database schema... [--force-reset will clear existing data]",
+    );
+    execSync("npx prisma db push --force-reset", { stdio: "inherit" });
 
     console.log("Seeding database...");
     execSync("npx prisma db seed", { stdio: "inherit" });
