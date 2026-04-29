@@ -5,108 +5,105 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import { prisma } from "@/database";
 
+// Configure and export NextAuth utilities for authentication
 export const { handlers, signIn, signOut, auth } = NextAuth({
-	adapter: PrismaAdapter(prisma),
-	providers: [
-		Google({
-			clientId: process.env.AUTH_GOOGLE_ID!,
-			clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-			authorization: {
-				params: {
-					scope: "openid email profile",
-				},
-			},
-		}),
-	],
-	callbacks: {
-		async signIn({ user, account }) {
-			// Add a check for account being non-null
-			if (!account) {
-				console.error("Account is null or undefined");
-				return false; // Prevent further execution if account is invalid
-			}
+  trustHost: true,
+  debug: process.env.NODE_ENV === "development",
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
+  cookies: {
+    sessionToken: {
+      name: "sim_session",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
+  providers: [
+    // Google OAuth provider configuration
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+          prompt: "select_account",
+        },
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/welcome",
+    error: "/welcome",
+  },
+  callbacks: {
+    // Only allow users that exist in the database to sign in
+    async signIn({ user }) {
+      if (!user.email) return false;
 
-			let defaultSemester;
-			const firstSemester = await prisma.semester.findFirst({
-				include: { thursdays: { include: { groups: true } }, users: true },
-			});
+      const dbUser = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
 
-			if (firstSemester) {
-				defaultSemester = firstSemester;
-			} else {
-				defaultSemester = { id: "" };
-			}
+      return !!dbUser;
+    },
 
-			const email = user.email as string;
+    // Enrich the JWT with user data from the database
+    async jwt({ token, user }) {
+      // Map user ID on initial sign in
+      if (user) {
+        token.id = user.id;
+      }
 
-			const isUserFound = await prisma.user.findFirst({ where: { email: email }, include: { accounts: true } });
+      if (!token.email) return token;
 
-			if (isUserFound?.accounts.length == 0) {
-				try {
-					await prisma.user.update({
-						where: {
-							// Check if the user already exists by email.
-							email: email,
-						},
-						data: {
-							accounts: {
-								create: {
-									type: account.type,
-									provider: account.provider,
-									providerAccountId: account.providerAccountId,
-									access_token: account.access_token,
-									refresh_token: account.refresh_token,
-									expires_at: account.expires_at,
-								},
-							},
-							semesters: { connect: { id: defaultSemester.id } },
-						},
-					});
-				} catch (error) {
-					console.error("ERROR:", error);
-					// Deny sign in.
-					return false;
-				}
-			}
+      try {
+        // Fetch user permissions and ID from database
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+          select: {
+            id: true,
+            admin: true,
+          },
+        });
 
-			// Allow sign in.
-			return true;
-		},
-		async jwt({ token }) {
-			if (!token.email) return token;
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.admin = dbUser.admin;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.error("JWT Callback Error:", error);
+      }
 
-			const dbUser = await prisma.user.findUnique({
-				where: { email: token.email },
-				select: {
-					id: true,
-					admin: true,
-				},
-			});
+      // Clean up token to keep it small and prevent header size errors
+      const picture = token.picture as string;
+      const isBase64Image = picture?.startsWith("data:image");
 
-			if (dbUser) {
-				token.id = dbUser.id;
-				token.admin = dbUser.admin;
-			}
+      return {
+        id: (token.id as string) || (token.sub as string),
+        email: token.email as string,
+        name: token.name as string,
+        picture: isBase64Image ? "/face.jpg" : picture,
+        admin: token.admin as boolean,
+      } as any;
+    },
 
-			return token;
-		},
+    // Pass data from the JWT to the session object
+    async session({ session, token }) {
+      if (session?.user && token) {
+        session.user.id = token.id as string;
+        session.user.admin = token.admin as boolean;
+        session.user.name = token.name as string;
+        session.user.image = token.picture as string;
+      }
 
-		async session({ session, token }) {
-			if (!session?.user) return session;
-
-			if (token?.email) {
-				const dbUser = await prisma.user.findUnique({
-					where: { email: token.email },
-					select: { id: true, admin: true },
-				});
-
-				if (dbUser) {
-					session.user.id = dbUser.id;
-					session.user.admin = dbUser.admin;
-				}
-			}
-
-			return session;
-		},
-	},
+      return session;
+    },
+  },
 });

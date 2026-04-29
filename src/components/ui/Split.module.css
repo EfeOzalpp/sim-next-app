@@ -1,0 +1,97 @@
+.container {
+	container-type: inline-size;
+	width: 100%;
+	margin-bottom: 1rem;
+}
+
+.split {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.start {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.start * {
+	margin: 0;
+	font-weight: bold;
+	overflow-wrap: break-word;
+}
+
+.end {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	justify-content: flex-end;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+/* Ensure children within the end slot maintain their own size preference on desktop */
+.end > * {
+	flex-shrink: 0;
+}
+
+/* Container Query for dynamic snapping */
+@container (max-width: 600px) {
+	.split {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.75rem;
+	}
+
+	.start {
+		text-align: center;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.end {
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.75rem;
+	}
+
+	/* Force children to fill width when stacked */
+	.start > *,
+	.end > *,
+	.end > div[class*="wrapper"],
+	.end > .neo-brutal,
+	.end > .neo-pressable,
+	.end :global(.ant-select),
+	.end :global(.ant-input-affix-wrapper),
+	.end :global(.ant-btn),
+	.end :global(.neo-brutal),
+	.end :global(.neo-pressable) {
+		width: 100% !important;
+		min-width: 100% !important;
+		display: flex !important;
+		flex: none;
+	}
+
+	/* Ensure elements inside wrappers (like Block component) stretch */
+	.start > div[class*="wrapper"] > *,
+	.start > div[class*="wrapper"] > a,
+	.start > div[class*="wrapper"] :global(.neo-brutal),
+	.start > div[class*="wrapper"] :global(.neo-pressable),
+	.end > div[class*="wrapper"] > *,
+	.end > div[class*="wrapper"] > a,
+	.end > div[class*="wrapper"] :global(.neo-brutal),
+	.end > div[class*="wrapper"] :global(.neo-pressable) {
+		width: 100% !important;
+		display: flex !important;
+	}
+
+	.start > div[class*="wrapper"] > a > *,
+	.end > div[class*="wrapper"] > a > * {
+		width: 100% !important;
+	}
+}

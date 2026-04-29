@@ -1,0 +1,11 @@
+.wrapper {
+	position: relative;
+	display: inline-flex;
+	padding-top: var(--neo-depth);
+	box-sizing: border-box;
+}
+
+.disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

@@ -1,3 +1,4 @@
+// Database client and datasource configuration
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -5,62 +6,65 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
+// User model for authentication and profiles
 model User {
   id            String     @id @default(cuid())
   email         String     @unique
   accounts      Account[]
   sessions      Session[]
-  name          String?
-  image         String?
+  name          String
+  image         String    @default("/face.jpg")
+  about         String?
   pronouns      String?
   link          String?
-  username      String     @unique
   admin         Boolean    @default(false)
-  presentations Work[]
-  productions   Group[]
+  presentations Presentation[]
+  productions   Production[]
   semesters     Semester[]
+}
+
+// Presentation model for tracking scheduled talks or demos
+model Presentation {
+  id            String      @id @default(cuid())
+  name          String
   about         String?
+  presenters    User[]
+  production_id String?
+  production    Production? @relation(fields: [production_id], references: [id], onDelete: Cascade)
 }
 
-model Work {
-  id         String  @id @default(uuid())
-  name       String
-  image      String
-  about      String
-  presenters User[]
-  group_id   String?
-  group      Group?  @relation(fields: [group_id], references: [id])
-}
-
-model Group {
-  id            String    @id @default(uuid())
+// Production model representing a collection of presentations
+model Production {
+  id            String         @id @default(cuid())
   name          String
   location      String
   producers     User[]
-  presentations Work[]
-  thursday_id   String?
-  thursday      Thursday? @relation(fields: [thursday_id], references: [id])
+  presentations Presentation[]
+  thursday_id   String
+  thursday      Thursday      @relation(fields: [thursday_id], references: [id], onDelete: Cascade)
 }
 
+// Thursday model for tracking weekly events
 model Thursday {
-  id          String    @id @default(uuid())
+  id          String       @id @default(cuid())
   date        DateTime
   name        String
-  groups      Group[]
+  productions Production[]
   semester_id String?
-  semester    Semester? @relation(fields: [semester_id], references: [id])
+  semester    Semester?    @relation(fields: [semester_id], references: [id], onDelete: Cascade)
 }
 
+// Semester model for grouping events by academic period
 model Semester {
-  id        String     @id @default(uuid())
+  id        String     @id @default(cuid())
   name      String
   thursdays Thursday[]
   users     User[]
 }
 
+// NextAuth Account model for OAuth provider linking
 model Account {
   userId            String
   type              String
@@ -82,7 +86,9 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
+// NextAuth Session model for managing active user sessions
 model Session {
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime

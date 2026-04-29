@@ -1,0 +1,28 @@
+.Presentation {
+  display: flex;
+  margin: 0.5rem 0;
+  width: 100%;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.PresentationInner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.PresentationInner div {
+  margin: 0.5em;
+}
+
+.GreyButton {
+	background: var(--neo-bg-white) !important;
+	color: #222 !important;
+}
+
+@media (min-width: 768px) {
+  .PresentationInner {
+    flex-direction: row;
+  }
+}

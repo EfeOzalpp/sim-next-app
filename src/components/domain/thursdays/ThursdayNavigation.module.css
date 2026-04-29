@@ -1,0 +1,8 @@
+.ThursdayNavigation {
+	margin-bottom: 1rem;
+}
+
+.GreyButton {
+	background: var(--neo-bg-white) !important;
+	color: #222 !important;
+}

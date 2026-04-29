@@ -1,0 +1,50 @@
+.ThursdayCard {
+  width: 100%;
+  background-color: white !important;
+  display: block !important;
+  padding: 1rem;
+}
+
+.ThursdayCard a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.Title {
+  margin: 0rem;
+}
+
+.Title a {
+  color: var(--neo-color-orange) !important;
+}
+
+.ProductionsTable {
+  margin-top: 1rem;
+}
+
+.ProductionCard {
+  border: 0.1rem solid #ddd;
+  border-radius: 0.33rem;
+  padding: 1rem;
+  background-color: white;
+  margin-bottom: 1rem;
+}
+
+.People {
+  display: flex;
+  flex-direction: column;
+}
+
+.People > div {
+  flex: 1;
+}
+
+.People ul {
+  margin: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .People {
+    flex-direction: row; /* desktop */
+  }
+}
