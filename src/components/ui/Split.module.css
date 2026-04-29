@@ -48,6 +48,9 @@
 	.start {
 		text-align: center;
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	.end {
@@ -58,14 +61,37 @@
 	}
 
 	/* Force children to fill width when stacked */
+	.start > *,
 	.end > *,
 	.end > div[class*="wrapper"],
 	.end > .neo-brutal,
+	.end > .neo-pressable,
 	.end :global(.ant-select),
 	.end :global(.ant-input-affix-wrapper),
-	.end :global(.ant-btn) {
+	.end :global(.ant-btn),
+	.end :global(.neo-brutal),
+	.end :global(.neo-pressable) {
 		width: 100% !important;
+		min-width: 100% !important;
 		display: flex !important;
 		flex: none;
+	}
+
+	/* Ensure elements inside wrappers (like Block component) stretch */
+	.start > div[class*="wrapper"] > *,
+	.start > div[class*="wrapper"] > a,
+	.start > div[class*="wrapper"] :global(.neo-brutal),
+	.start > div[class*="wrapper"] :global(.neo-pressable),
+	.end > div[class*="wrapper"] > *,
+	.end > div[class*="wrapper"] > a,
+	.end > div[class*="wrapper"] :global(.neo-brutal),
+	.end > div[class*="wrapper"] :global(.neo-pressable) {
+		width: 100% !important;
+		display: flex !important;
+	}
+
+	.start > div[class*="wrapper"] > a > *,
+	.end > div[class*="wrapper"] > a > * {
+		width: 100% !important;
 	}
 }

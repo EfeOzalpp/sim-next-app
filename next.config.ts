@@ -1,10 +1,13 @@
 import type { NextConfig } from "next";
 
+// Next.js configuration for the application
 const nextConfig: NextConfig = {
 	turbopack: {},
+	// Webpack customization
 	webpack(config, { dev }) {
 		if (!dev) {
-			config.devtool = "source-map"; // Enable source maps in production build
+			// Enable source maps in production to assist with debugging
+			config.devtool = "source-map";
 		}
 		return config;
 	},

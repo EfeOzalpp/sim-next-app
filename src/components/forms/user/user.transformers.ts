@@ -1,21 +1,22 @@
-export const transformUserFromAPI = (user: any) => {
+import { UserInput } from "@/components/forms/schemas";
+
+export const transformUserFromAPI = (user: any): UserInput | null => {
   if (!user) return null;
   return {
     id: user.id,
-    username: user.username,
-    name: user.name || "",
+    name: user.name,
     pronouns: user.pronouns || "",
     image: user.image || "/face.jpg",
-    email: user.email || "",
+    email: user.email,
     link: user.link || "",
     about: user.about || "",
     admin: user.admin || false,
+    semesterIds: user.semesters?.map((s: any) => s.id) || [],
   };
 };
 
 export const transformUserPayload = (formData: any) => {
   return {
     ...formData,
-    // Ensure email is trimmed if needed, etc.
   };
 };

@@ -1,19 +1,28 @@
 .Presentation {
-	display: flex;
-	flex-direction: column;
-	border: 0.1rem solid grey;
-	border-radius: 0.33rem;
-	padding: 0.5rem;
-	margin: 0.5rem 0;
-	width: 100%;
+  display: flex;
+  margin: 0.5rem 0;
+  width: 100%;
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
-.Presentation div {
-	margin: 0.5em;
+.PresentationInner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.PresentationInner div {
+  margin: 0.5em;
+}
+
+.GreyButton {
+	background: var(--neo-bg-white) !important;
+	color: #222 !important;
 }
 
 @media (min-width: 768px) {
-	.Presentation {
-		flex-direction: row;
-	}
+  .PresentationInner {
+    flex-direction: row;
+  }
 }

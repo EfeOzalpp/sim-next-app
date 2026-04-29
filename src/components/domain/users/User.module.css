@@ -66,7 +66,7 @@
 	padding: 0.25rem; /* spacing from label */
 	color: #222;
 
-	/* NEW: stack WorkCards vertically */
+	/* NEW: stack PresentationCards vertically */
 	display: flex;
 	flex-direction: column;
 }
@@ -74,6 +74,6 @@
 .Value > * {
 	margin-top: 0.75rem;
 
-	/* Make WorkCard fill the Value container width */
+	/* Make PresentationCard fill the Value container width */
 	width: 100%;
 }
