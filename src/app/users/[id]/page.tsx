@@ -55,15 +55,13 @@ export default async function User({ params }: UserProps) {
         />
 
         <div className={styles.UserData}>
-          <div className={styles.UserData}>
-            {user.admin ? (
-              <div className={styles.DataRow}>
-                <div className={styles.Label} style={{ color: "#f26419" }}>
-                  Admin
-                </div>
+          {user.admin ? (
+            <div className={styles.DataRow}>
+              <div className={styles.Label} style={{ color: "#f26419" }}>
+                Admin
               </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
 
           <div className={styles.DataRow}>
             <div className={styles.Label}>Pronouns</div>
