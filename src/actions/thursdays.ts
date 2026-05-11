@@ -29,14 +29,14 @@ export async function getThursday(id: string) {
 						name: true,
 						location: true,
 						thursday_id: true,
-						producers: { select: { id: true, name: true, image: true, admin: true } },
+						producers: { select: { id: true, name: true, image: true, role: true } },
 						presentations: {
 							select: {
 								id: true,
 								name: true,
 								about: true,
 								production_id: true,
-								presenters: { select: { id: true, name: true, image: true, admin: true } }
+								presenters: { select: { id: true, name: true, image: true, role: true } }
 							}
 						}
 					}
@@ -134,14 +134,14 @@ export async function getFilteredThursdays(rawFilters: { semester?: string | str
 						name: true,
 						location: true,
 						thursday_id: true,
-						producers: { select: { id: true, name: true, image: true, admin: true } },
+						producers: { select: { id: true, name: true, image: true, role: true } },
 						presentations: {
 							select: {
 								id: true,
 								name: true,
 								about: true,
 								production_id: true,
-								presenters: { select: { id: true, name: true, image: true, admin: true } }
+								presenters: { select: { id: true, name: true, image: true, role: true } }
 							}
 						}
 					},

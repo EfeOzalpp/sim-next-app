@@ -28,7 +28,7 @@ export default async function EditUser({ params }: EditUserProps) {
   const currentUser = await getCurrentUser();
   if (!currentUser) return null;
   const session = await auth();
-  const isAdmin = session?.user?.admin ?? false;
+  const isAdmin = session?.user?.role === "ADMIN";
   const semesters = await getAllSemesters();
 
   async function onSubmitEditUser(data: any) {

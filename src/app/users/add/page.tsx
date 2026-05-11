@@ -6,7 +6,7 @@ import { auth } from "@/authentication";
 
 export default async function AddUser() {
 	const session = await auth();
-	const isAdmin = session?.user?.admin ?? false;
+	const isAdmin = session?.user?.role === "ADMIN";
 	const semesters = await getAllSemesters();
 	
 	async function onSubmitAddUser(data: any) {

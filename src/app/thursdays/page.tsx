@@ -44,7 +44,7 @@ export default async function Thursdays({ searchParams }: ThursdaysProps) {
   const semestersResult = await getAllSemesters();
   const semesters = semestersResult.success ? semestersResult.data : [];
   const session = await auth();
-  const isAdmin = session?.user?.admin ?? false;
+  const isAdmin = session?.user?.role === "ADMIN";
 
   const semesterIdParam = Array.isArray(filters.semesterId)
     ? filters.semesterId[0]

@@ -10,7 +10,7 @@ export const transformUserFromAPI = (user: any): UserInput | null => {
     email: user.email,
     link: user.link || "",
     about: user.about || "",
-    admin: user.admin || false,
+    role: user.role || "STUDENT",
     semesterIds: user.semesters?.map((s: any) => s.id) || [],
   };
 };

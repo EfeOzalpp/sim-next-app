@@ -15,10 +15,10 @@ export default async function ProductionCard({
   isAdmin = false,
 }: ProductionCardProps) {
   const producers = production.producers.filter(
-    (user: any) => user.admin === false,
+    (user: any) => user.role === "ADMIN" === false,
   );
   const faculty = production.producers.filter(
-    (user: any) => user.admin === true,
+    (user: any) => user.role === "ADMIN" === true,
   );
   return (
     <div className={styles.ProductionCard}>

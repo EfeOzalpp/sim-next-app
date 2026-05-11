@@ -6,7 +6,7 @@ import { Space, Typography } from "antd";
 import {
   Input,
   TextArea,
-  Switch,
+  Select,
   Card,
   Button,
   Alert,
@@ -42,7 +42,7 @@ export default function UserForm({
     email: "",
     link: "",
     about: "",
-    admin: false,
+    role: "STUDENT",
     semesterIds: allSemesters.length > 0 ? [allSemesters[0].id] : [],
   };
 
@@ -104,13 +104,21 @@ export default function UserForm({
           </div>
 
           {isCurrentUserAdmin && (
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <Text strong>Admin Status</Text>
+            <div>
+              <Text strong style={{ display: "block", marginBottom: "8px" }}>Role</Text>
               <Controller
                 control={control}
-                name="admin"
+                name="role"
                 render={({ field }) => (
-                  <Switch checked={field.value} onChange={field.onChange} />
+                  <Select
+                    {...field}
+                    style={{ width: "100%" }}
+                    options={[
+                      { value: "STUDENT", label: "Student" },
+                      { value: "STAFF", label: "Staff" },
+                      { value: "ADMIN", label: "Admin" },
+                    ]}
+                  />
                 )}
               />
             </div>

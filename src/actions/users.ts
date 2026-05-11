@@ -25,7 +25,7 @@ export async function getUser(id: string) {
 				pronouns: true,
 				link: true,
 				about: true,
-				admin: true,
+				role: true,
 				semesters: {
 					select: { id: true, name: true }
 				},
@@ -55,13 +55,13 @@ export async function getUser(id: string) {
 export async function getAllUsers() {
 	return await action(async () => {
 		return await prisma.user.findMany({
+			where: { role: { not: "STAFF" } },
 			select: {
 				id: true,
 				name: true,
 				email: true,
 				image: true,
-				admin: true,
-				// Removed productions and semesters as they are not needed for user selection lists
+				role: true,
 			},
 			orderBy: { name: "asc" }
 		});
@@ -110,7 +110,7 @@ export async function getFilteredUsers(rawFilters: any) {
 				id: true,
 				name: true,
 				image: true,
-				admin: true,
+				role: true,
 			},
 		});
 	});
@@ -123,7 +123,7 @@ export async function editUser(formData: UserInput) {
 			throw new Error(validation.error.issues[0].message);
 		}
 		const validatedFields = validation.data;
-		const { id, name, about, image, email, link, pronouns, admin, semesterIds } = validatedFields;
+		const { id, name, about, image, email, link, pronouns, role, semesterIds } = validatedFields;
 		
 		const { user: currentUser, isAdmin } = await getAuthSession();
 		
@@ -135,7 +135,7 @@ export async function editUser(formData: UserInput) {
 		// Only admins can change admin status or semesters
 		const data: Prisma.UserUpdateInput = { name, about, image, link, pronouns, email };
 		if (isAdmin) {
-			data.admin = admin;
+			data.role = role;
 			if (semesterIds) {
 				data.semesters = {
 					set: semesterIds.map(id => ({ id }))

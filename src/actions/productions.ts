@@ -14,10 +14,10 @@ export async function getProduction(id: string) {
 		const production = await prisma.production.findUnique({
 			where: { id: id },
 			include: { 
-				producers: { select: { id: true, name: true, image: true, admin: true } }, 
+				producers: { select: { id: true, name: true, image: true, role: true } }, 
 				presentations: { 
 					include: { 
-						presenters: { select: { id: true, name: true, image: true, admin: true } } 
+						presenters: { select: { id: true, name: true, image: true, role: true } } 
 					} 
 				}, 
 				thursday: true 

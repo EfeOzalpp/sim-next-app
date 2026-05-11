@@ -36,7 +36,7 @@ export default async function UsersPage({ searchParams }: UsersProps) {
 	const semestersResult = await getAllSemesters();
 	const semesters = semestersResult.success ? semestersResult.data : [];
 	const session = await auth();
-	const isAdmin = session?.user?.admin ?? false;
+	const isAdmin = session?.user?.role === "ADMIN";
 	
 	const semesterIdParam = Array.isArray(filters.semesterId) ? filters.semesterId[0] : filters.semesterId;
 	const semesterParam = Array.isArray(filters.semester) ? filters.semester[0] : filters.semester;

@@ -8,7 +8,7 @@ export const UserSchema = z.object({
 	pronouns: z.string().optional(),
 	link: z.string().url("Invalid URL").or(z.literal("")).optional(),
 	about: z.string().optional(),
-	admin: z.boolean().default(false),
+	role: z.enum(["STUDENT", "STAFF", "ADMIN"]).default("STUDENT"),
 	semesterIds: z.array(z.string()).optional().default([]),
 });
 

@@ -16,7 +16,7 @@ export async function getAuthSession() {
 	return {
 		session,
 		user: session?.user ?? null,
-		isAdmin: session?.user?.admin ?? false,
+		isAdmin: session?.user?.role === "ADMIN"
 	};
 }
 

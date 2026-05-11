@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import { prisma } from "@/database";
 
+
 // Configure and export NextAuth utilities for authentication
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
@@ -67,13 +68,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { email: token.email },
           select: {
             id: true,
-            admin: true,
+            role: true,
           },
         });
 
         if (dbUser) {
           token.id = dbUser.id;
-          token.admin = dbUser.admin;
+          token.role = dbUser.role;
         } else {
           return null;
         }
@@ -90,7 +91,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: token.email as string,
         name: token.name as string,
         picture: isBase64Image ? "/face.jpg" : picture,
-        admin: token.admin as boolean,
+        role: token.role as string,
       } as any;
     },
 
@@ -98,7 +99,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (session?.user && token) {
         session.user.id = token.id as string;
-        session.user.admin = token.admin as boolean;
+        session.user.role = token.role as string;
         session.user.name = token.name as string;
         session.user.image = token.picture as string;
       }

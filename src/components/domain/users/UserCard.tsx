@@ -6,7 +6,7 @@ import { normalizeFaceImagePath } from "@/helpers";
 import { User } from "@prisma/client";
 
 interface UserCardProps {
-  user: Pick<User, "id" | "name" | "image" | "admin">;
+  user: Pick<User, "id" | "name" | "image" | "role">;
 }
 
 export default function UserCard({ user }: UserCardProps) {
@@ -14,7 +14,7 @@ export default function UserCard({ user }: UserCardProps) {
     <Block
       as="a"
       href={`/users/${user.id}`}
-      className={`${user.admin ? styles.UserCardAdmin : styles.UserCard} neo-pressable`}
+      className={`${user.role === "ADMIN" ? styles.UserCardAdmin : styles.UserCard} neo-pressable`}
     >
       <div className={`${styles.faceContent}`}>
         <div className={styles.imageWrapper}>
@@ -30,6 +30,7 @@ export default function UserCard({ user }: UserCardProps) {
           />
         </div>
         <div className={styles.name}>{user.name}</div>
+        <div className={styles.role}>{user.role.charAt(0) + user.role.slice(1).toLowerCase()}</div>
       </div>
     </Block>
   );

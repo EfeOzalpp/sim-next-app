@@ -47,7 +47,7 @@ export default async function NavBar({ session: initialSession }: NavBarProps) {
 					<NavSelect
 						pages={[
 							...pages.slice(0, 2),
-							...(session.user.admin ? [{ href: "/admin", label: "Admin" }] : []),
+							...(session.user.role === "ADMIN" ? [{ href: "/admin", label: "Admin" }] : []),
 							...pages.slice(2),
 						]}
 					/>

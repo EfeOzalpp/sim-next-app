@@ -82,7 +82,7 @@ export async function getSemesterFromName(name?: string) {
 										name: true,
 										about: true,
 										presenters: {
-											select: { id: true, name: true, image: true, admin: true }
+											select: { id: true, name: true, image: true, role: true }
 										} 
 									} 
 								} 
@@ -124,7 +124,7 @@ export async function getAdminSemesterData(semesterId: string, rawFilters: any =
 										id: true,
 										name: true,
 										presenters: {
-											select: { id: true, name: true, image: true, admin: true }
+											select: { id: true, name: true, image: true, role: true }
 										}
 									},
 								},
@@ -148,6 +148,7 @@ export async function getAdminSemesterData(semesterId: string, rawFilters: any =
 			where: {
 				semesters: { some: { id: semesterId } },
 				name: { contains: userSearch, mode: "insensitive" },
+				role: { not: "STAFF" },
 			},
 			orderBy: { name: "asc" },
 			select: {

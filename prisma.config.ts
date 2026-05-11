@@ -1,4 +1,6 @@
 import { defineConfig } from '@prisma/config';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // Prisma configuration for schema location, database connection, and seeding
 export default defineConfig({

@@ -63,7 +63,7 @@ async function main() {
     data: {
       name: adminName,
       email: adminEmail,
-      admin: true,
+      role: "ADMIN",
     },
   });
 

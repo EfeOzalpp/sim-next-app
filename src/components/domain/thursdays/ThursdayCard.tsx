@@ -35,7 +35,7 @@ export default async function ThursdayCard({
   let isAdmin = initialIsAdmin;
   if (isAdmin === undefined) {
     const session = await auth();
-    isAdmin = session?.user?.admin ?? false;
+    isAdmin = session?.user?.role === "ADMIN";
   }
 
   return (

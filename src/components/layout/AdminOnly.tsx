@@ -7,7 +7,7 @@ interface AdminOnlyProps {
 
 export default async function AdminOnly({ children, fallback = null }: AdminOnlyProps) {
 	const session = await auth();
-	const isAdmin = session?.user?.admin ?? false;
+	const isAdmin = session?.user?.role === "ADMIN";
 
 	if (!isAdmin) {
 		return <>{fallback}</>;
