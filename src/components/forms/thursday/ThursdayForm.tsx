@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Space, Typography } from "antd";
 import { Card, Button, Alert } from "@/components/ui/AntD";
@@ -80,7 +80,6 @@ export default function ThursdayForm({
       <Space orientation="vertical" style={{ width: "100%" }} size="large">
         {error && (
           <Alert
-            message="Error"
             description={error}
             type="error"
             closable
@@ -91,11 +90,11 @@ export default function ThursdayForm({
         <ThursdaySection control={control} semesters={semesters} />
         <ProductionsSection control={control} users={users} />
 
-        <Button type="submit" disabled={isSubmitting} style={{ width: "100%" }}>
+        <Button type="submit" disabled={isSubmitting} className="neo-green" style={{ width: "100%" }}>
           {isSubmitting
             ? "Saving..."
             : thursdayId
-              ? "Update Day"
+              ? "Save Changes"
               : "Create Day"}
         </Button>
 

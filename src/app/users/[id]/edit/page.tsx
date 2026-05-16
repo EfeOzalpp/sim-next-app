@@ -1,6 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 
 import UserForm from "@/components/forms/user/UserForm";
+import Split from "@/components/ui/Split";
+import CloseButton from "@/components/ui/CloseButton";
+import styles from "@/app/users/[id]/edit/page.module.css";
 
 import { auth } from "@/authentication";
 
@@ -58,15 +61,23 @@ export default async function EditUser({ params }: EditUserProps) {
   }
 
   return (
-    <div>
-      <h2>Edit User</h2>
-      <UserForm
-        onSubmit={onSubmitEditUser}
-        onRemove={onSubmitRemoveUser}
-        user={user}
-        isCurrentUserAdmin={isAdmin}
-        allSemesters={semesters}
+    <>
+      <Split
+        className={styles.profileSplit}
+        start={<h2>Edit Profile</h2>}
+        end={<CloseButton href={`/users/${user.id}`} />}
       />
-    </div>
+      <div className={styles.pageWrapper}>
+        <div className="content-card">
+          <UserForm
+            onSubmit={onSubmitEditUser}
+            onRemove={onSubmitRemoveUser}
+            user={user}
+            isCurrentUserAdmin={isAdmin}
+            allSemesters={semesters}
+          />
+        </div>
+      </div>
+    </>
   );
 }

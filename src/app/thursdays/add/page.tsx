@@ -3,6 +3,9 @@ import { getAllUsers } from "@/actions/users";
 import { getAllSemesters } from "@/actions/semesters";
 import { createThursdayWithProductions } from "@/actions/thursdays";
 import { redirect } from "next/navigation";
+import Split from "@/components/ui/Split";
+import CloseButton from "@/components/ui/CloseButton";
+import styles from "@/app/thursdays/add/page.module.css";
 
 export default async function AddThursday() {
 	const usersResult = await getAllUsers();
@@ -20,13 +23,21 @@ export default async function AddThursday() {
 	}
 
 	return (
-		<div>
-			<h1>Add New Day</h1>
-			<ThursdayForm
-				users={users}
-				semesters={semesters}
-				onSubmit={onSubmit}
+		<>
+			<Split
+				className={styles.profileSplit}
+				start={<h2>Add New Day</h2>}
+				end={<CloseButton href="/thursdays" />}
 			/>
-		</div>
+			<div className={styles.pageWrapper}>
+				<div className="content-card">
+					<ThursdayForm
+						users={users}
+						semesters={semesters}
+						onSubmit={onSubmit}
+					/>
+				</div>
+			</div>
+		</>
 	);
 }

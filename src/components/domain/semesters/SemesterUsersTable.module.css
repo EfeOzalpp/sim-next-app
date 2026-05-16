@@ -1,0 +1,77 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.section + .section {
+	margin-top: 0.8rem;
+}
+
+.sectionLabel {
+	font-size: 0.72rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: #888;
+}
+
+.emptyLabel {
+	font-size: 0.82rem;
+	color: #aaa;
+	font-style: italic;
+}
+
+.cardsGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0.4rem;
+}
+
+@media (max-width: 768px) {
+	.cardsGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 3.2rem;
+	padding: 0.4rem 0.6rem;
+	border: var(--neo-border);
+	border-radius: 4px;
+	cursor: pointer;
+	color: inherit;
+	transition: border-color 0.1s ease;
+}
+
+.card:hover {
+	border-color: #555;
+}
+
+.cardDate {
+	align-self: flex-end;
+	font-size: 0.78rem;
+	color: #444;
+	font-weight: 600;
+}
+
+.cardBottom {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+
+.cardName {
+	font-size: 0.88rem;
+	font-weight: 600;
+	color: #222;
+}
+
+.cardArrow {
+	font-size: 1.2rem;
+	color: #555;
+	line-height: 1;
+}

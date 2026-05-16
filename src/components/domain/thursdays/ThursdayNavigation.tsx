@@ -13,21 +13,21 @@ export default function ThursdayNavigation({ previous, next }: ThursdayNavigatio
 			<Split
 				start={
 					previous && (
-						<Button 
+						<Button
 							href={`/thursdays/${previous.id}`}
 							className={styles.GreyButton}
 						>
-							← Previous Day: {previous.name} ({new Date(previous.date).toLocaleDateString()})
+							<span style={{ fontSize: "1.2rem", color: "#555", marginRight: "6px", lineHeight: 1 }}>←</span>Prior: {previous.name}
 						</Button>
 					)
 				}
 				end={
 					next && (
-						<Button 
+						<Button
 							href={`/thursdays/${next.id}`}
 							className={styles.GreyButton}
 						>
-							Next Day: {next.name} ({new Date(next.date).toLocaleDateString()}) →
+							Next: {next.name}<span style={{ fontSize: "1.2rem", color: "#555", marginLeft: "6px", lineHeight: 1 }}>→</span>
 						</Button>
 					)
 				}

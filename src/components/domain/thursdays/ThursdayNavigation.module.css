@@ -5,4 +5,5 @@
 .GreyButton {
 	background: var(--neo-bg-white) !important;
 	color: #222 !important;
+	font-weight: 600 !important;
 }

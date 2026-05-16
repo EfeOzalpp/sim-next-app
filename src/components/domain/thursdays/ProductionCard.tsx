@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styles from "@/components/domain/thursdays/ThursdayCard.module.css";
-import Split from "@/components/ui/Split";
 import PresentationCard from "@/components/domain/thursdays/PresentationCard";
 
 interface ProductionCardProps {
@@ -15,88 +14,60 @@ export default async function ProductionCard({
   isAdmin = false,
 }: ProductionCardProps) {
   const producers = production.producers.filter(
-    (user: any) => user.role === "ADMIN" === false,
+    (user: any) => user.role !== "ADMIN",
   );
   const faculty = production.producers.filter(
-    (user: any) => user.role === "ADMIN" === true,
+    (user: any) => user.role === "ADMIN",
   );
+
   return (
-    <div className={styles.ProductionCard}>
-      <Split
-        style={{ marginBottom: "0.5rem" }}
-        start={
-          <h4 style={{ fontSize: "1.2rem" }}>
-            <b>{production.name}</b> ({production.location})
-          </h4>
-        }
-        end={<div />}
-      />
-      <hr />
+    <div>
       <div className={styles.People}>
         <div>
-          <b>Producers:</b>
-          <ul>
+          <b>Producers</b>
+          <div className={styles.Names}>
             {producers.length > 0 ? (
-              producers.map((producer: any) => {
-                return (
-                  <li key={`producer.id:${producer.id}`}>
-                    <Link href={`/users/${producer.id}`}>{producer.name}</Link>
-                  </li>
-                );
-              })
+              producers.map((producer: any) => (
+                <Link key={producer.id} href={`/users/${producer.id}`}>
+                  {producer.name}
+                </Link>
+              ))
             ) : (
-              <li>
-                <i>There are no producers credited for this production yet.</i>
-              </li>
+              <i>No producers credited yet.</i>
             )}
-          </ul>
+          </div>
         </div>
         <div>
-          <b>Faculty:</b>
-          <ul>
+          <b>Faculty</b>
+          <div className={styles.Names}>
             {faculty.length > 0 ? (
-              faculty.map((facultyMember: any) => {
-                return (
-                  <li key={`faculty.id:${facultyMember.id}`}>
-                    <Link href={`/users/${facultyMember.id}`}>
-                      {facultyMember.name}
-                    </Link>
-                  </li>
-                );
-              })
+              faculty.map((facultyMember: any) => (
+                <Link key={facultyMember.id} href={`/users/${facultyMember.id}`}>
+                  {facultyMember.name}
+                </Link>
+              ))
             ) : (
-              <li>
-                <i>There are no faculty assigned to this production yet.</i>
-              </li>
+              <i>No faculty assigned yet.</i>
             )}
-          </ul>
+          </div>
         </div>
       </div>
 
+      <div style={{ borderTop: "var(--neo-border)", margin: "0.5rem -16px 0.75rem" }} />
+
       <div>
-        <b>Presentations:</b>
-        <div
-          style={{
-            paddingRight: "1rem",
-            paddingLeft: "1rem",
-            paddingTop: "0",
-            paddingBottom: "0",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <b>Presentations</b>
+        <div style={{ marginTop: "0.5rem" }}>
           {production.presentations.length > 0 ? (
-            production.presentations?.map((presentation: any) => {
-              return (
-                <PresentationCard
-                  key={presentation.id}
-                  presentation={presentation}
-                />
-              );
-            })
+            production.presentations.map((presentation: any) => (
+              <PresentationCard
+                key={presentation.id}
+                presentation={presentation}
+              />
+            ))
           ) : (
             <p>
-              <i>There are no presentations for this production yet.</i>
+              <i>No presentations for this production yet.</i>
             </p>
           )}
         </div>

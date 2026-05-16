@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Space, Typography } from "antd";
 import {
@@ -17,6 +17,7 @@ import ImageUpload from "@/components/ui/ImageUpload";
 import DeleteButton from "@/components/ui/DeleteButton";
 import { handleFormAction } from "@/helpers";
 import { UserInput } from "@/components/forms/schemas";
+import styles from "@/components/forms/user/UserForm.module.css";
 
 const { Text, Title } = Typography;
 
@@ -69,7 +70,6 @@ export default function UserForm({
       <Space orientation="vertical" size="large" style={{ width: "100%" }}>
         {error && (
           <Alert
-            message="Error"
             description={error}
             type="error"
             showIcon
@@ -98,10 +98,41 @@ export default function UserForm({
               style={{ fontSize: "12px", display: "block", marginTop: "4px" }}
             >
               {isCurrentUserAdmin
-                ? "You can upload high resolution photos up to 8MB. They will be automatically downsized."
+                ? <>You can upload high resolution photos up to 8MB.<br />They will be automatically downsized.</>
                 : "Contact SIM faculty to change your photo."}
             </Text>
           </div>
+
+          {isCurrentUserAdmin && allSemesters.length > 0 && (
+            <div>
+              <Text strong style={{ display: "block", marginBottom: "8px" }}>
+                Semesters Enrolled
+              </Text>
+              <div style={{ maxHeight: "200px", overflowY: "auto", padding: "12px" }}>
+                <Controller
+                  control={control}
+                  name="semesterIds"
+                  render={({ field }) => (
+                    <Checkbox.Group
+                      {...field}
+                      style={{
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                        gap: "8px",
+                      }}
+                    >
+                      {allSemesters.map((semester) => (
+                        <Checkbox key={semester.id} value={semester.id}>
+                          {semester.name}
+                        </Checkbox>
+                      ))}
+                    </Checkbox.Group>
+                  )}
+                />
+              </div>
+            </div>
+          )}
 
           {isCurrentUserAdmin && (
             <div>
@@ -125,105 +156,104 @@ export default function UserForm({
           )}
         </Space>
 
-        <div>
-          <Text strong style={{ display: "block", marginBottom: "8px" }}>
-            Full Name
-          </Text>
-          <Controller
-            control={control}
-            name="name"
-            rules={{ required: "Name is required" }}
-            render={({ field, fieldState }) => (
-              <>
-                <Input
-                  {...field}
-                  placeholder="Enter name"
-                  status={fieldState.error ? "error" : ""}
-                />
-                {fieldState.error && (
-                  <Text type="danger">{fieldState.error.message}</Text>
-                )}
-              </>
-            )}
-          />
+        <div className={styles.formGrid}>
+          <div>
+            <Text strong style={{ display: "block", marginBottom: "8px" }}>
+              Full Name
+            </Text>
+            <Controller
+              control={control}
+              name="name"
+              rules={{ required: "Name is required" }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Input
+                    {...field}
+                    placeholder="Enter name"
+                    status={fieldState.error ? "error" : ""}
+                  />
+                  {fieldState.error && (
+                    <Text type="danger">{fieldState.error.message}</Text>
+                  )}
+                </>
+              )}
+            />
+          </div>
+
+          <div>
+            <Text strong style={{ display: "block", marginBottom: "8px" }}>
+              Pronouns
+            </Text>
+            <Controller
+              control={control}
+              name="pronouns"
+              render={({ field }) => (
+                <Input {...field} placeholder="e.g. they/them" />
+              )}
+            />
+          </div>
+
+          <div>
+            <Text strong style={{ display: "block", marginBottom: "8px" }}>
+              Email Address
+            </Text>
+            <Controller
+              control={control}
+              name="email"
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Input
+                    {...field}
+                    placeholder="email@example.com"
+                    disabled={!isCurrentUserAdmin && user}
+                    status={fieldState.error ? "error" : ""}
+                  />
+                  {!isCurrentUserAdmin && user && (
+                    <Text
+                      type="secondary"
+                      italic
+                      style={{ fontSize: "12px", display: "block" }}
+                    >
+                      Contact SIM faculty to change your email.
+                    </Text>
+                  )}
+                  {fieldState.error && (
+                    <Text type="danger">{fieldState.error.message}</Text>
+                  )}
+                </>
+              )}
+            />
+          </div>
+
+          <div>
+            <Text strong style={{ display: "block", marginBottom: "8px" }}>
+              Link
+            </Text>
+            <Controller
+              control={control}
+              name="link"
+              render={({ field }) => (
+                <Input {...field} placeholder="https://..." />
+              )}
+            />
+            <Text
+              type="secondary"
+              italic
+              style={{ fontSize: "12px", display: "block", marginTop: "4px" }}
+            >
+              Social media, gallery of your presentations, etc.
+            </Text>
+          </div>
         </div>
 
-        <div>
-          <Text strong style={{ display: "block", marginBottom: "8px" }}>
-            Pronouns
-          </Text>
-          <Controller
-            control={control}
-            name="pronouns"
-            render={({ field }) => (
-              <Input {...field} placeholder="e.g. they/them" />
-            )}
-          />
-        </div>
-
-        <div>
-          <Text strong style={{ display: "block", marginBottom: "8px" }}>
-            Email Address
-          </Text>
-          <Controller
-            control={control}
-            name="email"
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            }}
-            render={({ field, fieldState }) => (
-              <>
-                <Input
-                  {...field}
-                  placeholder="email@example.com"
-                  disabled={!isCurrentUserAdmin && user}
-                  status={fieldState.error ? "error" : ""}
-                />
-                {!isCurrentUserAdmin && user && (
-                  <Text
-                    type="secondary"
-                    italic
-                    style={{ fontSize: "12px", display: "block" }}
-                  >
-                    Contact SIM faculty to change your email.
-                  </Text>
-                )}
-                {fieldState.error && (
-                  <Text type="danger">{fieldState.error.message}</Text>
-                )}
-              </>
-            )}
-          />
-        </div>
-
-        <div>
-          <Text strong style={{ display: "block", marginBottom: "8px" }}>
-            Link
-          </Text>
-          <Text
-            type="secondary"
-            style={{
-              fontSize: "12px",
-              display: "block",
-              marginBottom: "4px",
-            }}
-          >
-            Social media, gallery of your presentations, etc.
-          </Text>
-          <Controller
-            control={control}
-            name="link"
-            render={({ field }) => (
-              <Input {...field} placeholder="https://..." />
-            )}
-          />
-        </div>
-
-        <div>
+        <div className={styles.aboutField}>
           <Text strong style={{ display: "block", marginBottom: "8px" }}>
             About
           </Text>
@@ -233,54 +263,16 @@ export default function UserForm({
             render={({ field }) => (
               <TextArea
                 {...field}
-                rows={4}
+                rows={6}
+                style={{ width: "100%" }}
                 placeholder="Tell us about yourself..."
               />
             )}
           />
         </div>
 
-        {isCurrentUserAdmin && allSemesters.length > 0 && (
-          <div>
-            <Text strong style={{ display: "block", marginBottom: "8px" }}>
-              Semesters Enrolled
-            </Text>
-            <Card
-              styles={{
-                body: {
-                  padding: "12px",
-                  maxHeight: "200px",
-                  overflowY: "auto",
-                },
-              }}
-            >
-              <Controller
-                control={control}
-                name="semesterIds"
-                render={({ field }) => (
-                  <Checkbox.Group
-                    {...field}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                    }}
-                  >
-                    {allSemesters.map((semester) => (
-                      <Checkbox key={semester.id} value={semester.id}>
-                        {semester.name}
-                      </Checkbox>
-                    ))}
-                  </Checkbox.Group>
-                )}
-              />
-            </Card>
-          </div>
-        )}
-
-        <Button type="submit" disabled={isSubmitting} style={{ width: "100%" }}>
-          {isSubmitting ? "Saving..." : user ? "Update User" : "Create User"}
+        <Button type="submit" disabled={isSubmitting} className="neo-green" style={{ width: "100%" }}>
+          {isSubmitting ? "Saving..." : user ? "Save Changes" : "Create User"}
         </Button>
 
         {user && isCurrentUserAdmin && onRemove && (

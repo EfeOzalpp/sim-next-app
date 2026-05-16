@@ -1,13 +1,9 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { Table, Divider } from "@/components/ui/AntD";
-import { Typography } from "antd";
-
-const { Text } = Typography;
-
+import { Table } from "@/components/ui/AntD";
 import { Prisma, Semester } from "@prisma/client";
+import styles from "@/components/domain/semesters/SemesterUsersTable.module.css";
 
 type ProductionWithThursday = Prisma.ProductionGetPayload<{ include: { thursday: { select: { id: true, date: true } } } }>;
 type PresentationWithProduction = Prisma.PresentationGetPayload<{ include: { production: { include: { thursday: { select: { id: true, date: true } } } } } }>;
@@ -25,64 +21,112 @@ interface SemesterUsersTableProps {
 	semester?: Semester | null;
 }
 
-export default function SemesterUsersTable({ users = [], semester = null }: SemesterUsersTableProps) {
+const dateFormat: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" };
+
+function ItemCard({ name, date, href }: { name: string; date?: Date; href: string }) {
+	return (
+		<Link href={href} className={styles.card}>
+			<span className={styles.cardDate}>
+				{date ? new Date(date).toLocaleDateString("en-US", dateFormat) : "N/A"}
+			</span>
+			<div className={styles.cardBottom}>
+				<span className={styles.cardName}>{name}</span>
+				<span className={styles.cardArrow}>→</span>
+			</div>
+		</Link>
+	);
+}
+
+export default function SemesterUsersTable({ users = [] }: SemesterUsersTableProps) {
 	const columns = [
 		{
-			title: "Name",
+			title: "Names",
 			dataIndex: "name",
 			key: "name",
-			render: (text: string, user: UserStat) => <Link href={`/users/${user.id}/`}>{text}</Link>,
+			render: (text: string, user: UserStat) => (
+				<Link href={`/users/${user.id}/`}>{text}</Link>
+			),
 		},
 		{
 			title: "Productions",
 			key: "productions",
-			render: (_: any, user: UserStat) => (
-				<>
-					<Text strong>Total in Semester: {user.productions?.length ?? 0}</Text>
-					<ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
-						{(user.productions || []).map((production) => (
-							<li key={`production.id:${production.id}`}>
-								<Link href={`/thursdays/${production.thursday_id}`}>
-									{production.name} ({production.date ? new Date(production.date).toLocaleDateString() : "N/A"})
-								</Link>
-							</li>
-						))}
-					</ul>
-				</>
-			),
+			width: "40%",
+			render: (_: any, user: UserStat) => {
+				const productions = user.productions || [];
+				if (productions.length === 0) {
+					return <span className={styles.emptyLabel}>No current productions</span>;
+				}
+				return (
+					<div className={styles.section}>
+						<span className={styles.sectionLabel}>
+							Productions: {productions.length}
+						</span>
+						<div className={styles.cardsGrid}>
+							{productions.map((p) => (
+								<ItemCard
+									key={p.id}
+									name={p.name}
+									date={p.date}
+									href={`/thursdays/${p.thursday_id}`}
+								/>
+							))}
+						</div>
+					</div>
+				);
+			},
 		},
 		{
 			title: "Presentations",
 			key: "presentations",
-			render: (_: any, user: UserStat) => (
-				<>
-					<div>
-						<Text strong>Total Before Mid: {user.presentationsBeforeMid?.length ?? 0}</Text>
-						<ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
-							{(user.presentationsBeforeMid || []).map((presentation) => (
-								<li key={`presentation.id:${presentation.id}`}>
-									<Link href={`/thursdays/${presentation.production?.thursday?.id}`}>
-										{presentation.name} ({presentation.date ? new Date(presentation.date).toLocaleDateString() : "N/A"})
-									</Link>
-								</li>
-							))}
-						</ul>
-					</div>
-					<Divider style={{ margin: "8px 0" }} />
-					<div>
-						<Text strong>Total After Mid: {user.presentationsAfterMid?.length ?? 0}</Text>
-						<ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
-							{(user.presentationsAfterMid || []).map((presentation) => (
-								<li key={`presentation.id:${presentation.id}`}>
-									<Link href={`/thursdays/${presentation.production?.thursday?.id}`}>
-										{presentation.name} ({presentation.date ? new Date(presentation.date).toLocaleDateString() : "N/A"})
-									</Link>
-								</li>
-							))}
-						</ul>
-					</div>
-				</>
-			),
+			width: "40%",
+			render: (_: any, user: UserStat) => {
+				const hasPreMid = user.presentationsBeforeMid?.length > 0;
+				const hasPostMid = user.presentationsAfterMid?.length > 0;
+				const hasNone = !hasPreMid && !hasPostMid;
+
+				if (hasNone) {
+					return (
+						<span className={styles.emptyLabel}>
+							No current presentations
+						</span>
+					);
+				}
+
+				return (
+					<>
+						{hasPreMid && (
+							<div className={styles.section}>
+								<span className={styles.sectionLabel}>Pre-Mid</span>
+								<div className={styles.cardsGrid}>
+									{user.presentationsBeforeMid.map((p) => (
+										<ItemCard
+											key={p.id}
+											name={p.name}
+											date={p.date}
+											href={`/thursdays/${p.production?.thursday?.id}`}
+										/>
+									))}
+								</div>
+							</div>
+						)}
+						{hasPostMid && (
+							<div className={styles.section}>
+								<span className={styles.sectionLabel}>Post-Mid</span>
+								<div className={styles.cardsGrid}>
+									{user.presentationsAfterMid.map((p) => (
+										<ItemCard
+											key={p.id}
+											name={p.name}
+											date={p.date}
+											href={`/thursdays/${p.production?.thursday?.id}`}
+										/>
+									))}
+								</div>
+							</div>
+						)}
+					</>
+				);
+			},
 		},
 	];
 

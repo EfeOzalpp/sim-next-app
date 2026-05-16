@@ -1,3 +1,7 @@
+.resultsWrapper {
+	padding: var(--section-padding);
+}
+
 .ThursdaysGrid {
 	display: grid;
 	gap: 1rem;

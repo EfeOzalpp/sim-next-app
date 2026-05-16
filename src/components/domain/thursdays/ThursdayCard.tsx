@@ -3,6 +3,7 @@ import styles from "@/components/domain/thursdays/ThursdayCard.module.css";
 import { Button } from "@/components/ui/AntD";
 import Split from "@/components/ui/Split";
 import ProductionCard from "@/components/domain/thursdays/ProductionCard";
+import ProductionsCollapse from "@/components/domain/thursdays/ProductionsCollapse";
 import { auth } from "@/authentication";
 import Block from "@/components/ui/Block";
 
@@ -41,12 +42,18 @@ export default async function ThursdayCard({
   return (
     <Block as="div" className={styles.ThursdayCard} pressable={false}>
       <Split
+        className={styles.headerSplit}
         start={
-          <h2 className={styles.Title}>
-            <Link href={`/thursdays/${thursday.id}`}>
-              <b>{thursday.name}</b> ({thursday.date.toLocaleDateString()})
-            </Link>
-          </h2>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <h2 className={styles.Title}>
+              <Link href={`/thursdays/${thursday.id}`}>
+                <b>{thursday.name}</b>
+              </Link>
+            </h2>
+            <span className={styles.DateBadge}>
+              {new Date(thursday.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            </span>
+          </div>
         }
         end={
           isAdmin && (
@@ -57,16 +64,22 @@ export default async function ThursdayCard({
         }
       />
 
-      <div className={styles.ProductionsTable}>
+      <div className={styles.productionsWrapper}>
         {thursday.productions.length > 0 ? (
-          thursday.productions.map((production: any) => (
-            <ProductionCard
-              key={production.id}
-              thursday={thursday}
-              production={production}
-              isAdmin={isAdmin}
-            />
-          ))
+          <ProductionsCollapse
+            productions={thursday.productions.map((production: any) => ({
+              id: production.id,
+              name: production.name,
+              location: production.location,
+              content: (
+                <ProductionCard
+                  thursday={thursday}
+                  production={production}
+                  isAdmin={isAdmin}
+                />
+              ),
+            }))}
+          />
         ) : (
           <div>There are no productions scheduled on this Thursday yet.</div>
         )}

@@ -6,6 +6,9 @@ import { getAllUsers } from "@/actions/users";
 import { getAllSemesters } from "@/actions/semesters";
 import { isCurrentUserAdmin } from "@/actions/auth";
 import { redirect } from "next/navigation";
+import Split from "@/components/ui/Split";
+import CloseButton from "@/components/ui/CloseButton";
+import styles from "@/app/thursdays/[id]/edit/page.module.css";
 
 interface EditThursdayProps {
 	params: Promise<{ id: string }>;
@@ -46,17 +49,25 @@ export default async function EditThursday({ params }: EditThursdayProps) {
 	}
 
 	return (
-		<div>
-			<h1>Edit Day</h1>
-			<ThursdayForm
-				defaultValues={thursday}
-				users={users}
-				semesters={semesters}
-				thursdayId={id}
-				onSubmit={onSubmit}
-				onRemove={onRemove}
-				isCurrentUserAdmin={isAdmin}
+		<>
+			<Split
+				className={styles.profileSplit}
+				start={<h2>Edit Day</h2>}
+				end={<CloseButton href={`/thursdays/${id}`} />}
 			/>
-		</div>
+			<div className={styles.pageWrapper}>
+				<div className="content-card">
+					<ThursdayForm
+						defaultValues={thursday}
+						users={users}
+						semesters={semesters}
+						thursdayId={id}
+						onSubmit={onSubmit}
+						onRemove={onRemove}
+						isCurrentUserAdmin={isAdmin}
+					/>
+				</div>
+			</div>
+		</>
 	);
 }

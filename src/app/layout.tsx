@@ -33,9 +33,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 						},
 						components: {
 							Button: {
-								boxShadow: "none",
-								boxShadowSecondary: "none",
-								boxShadowTertiary: "none",
+							boxShadowSecondary: "none",
+							boxShadowTertiary: "none",
+							paddingInline: 20,  
+							controlHeight: 40,  
+							lineWidth: 4,
 							},
 							Input: {
 								boxShadow: "none",
@@ -50,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 					}}
 				>
 					<NavBar session={session} />
-					<div style={{ margin: "1rem" }}>{children}</div>
+					<div>{children}</div>
 				</ConfigProvider>
 			</body>
 		</html>

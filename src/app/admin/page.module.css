@@ -1,0 +1,24 @@
+.infoBar {
+	position: static !important;
+}
+
+.tableWrapper {
+	padding: 0 6rem 4rem;
+}
+
+.viewingLabel {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #1a120b;
+}
+
+.dateBadge {
+	display: inline-block;
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	padding: 0.3rem 0.8rem;
+	background: var(--secondary-bg);
+	border-radius: 4px;
+	color: #3d1f05;
+}

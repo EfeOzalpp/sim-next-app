@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
 import { useURLFilter } from "@/hooks/useURLFilter";
 import { Input, Select } from "@/components/ui/AntD";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { InputProps, SelectProps } from "antd";
 
 interface FilterInputProps extends Omit<InputProps, "value" | "onChange"> {
@@ -20,10 +19,13 @@ export function FilterInput({ query = "search", placeholder = "Search", ...props
 			placeholder={placeholder}
 			onChange={(e) => handleChange(e.target.value)}
 			allowClear
+			prefix={<SearchOutlined />}
 			suffix={isPending ? <LoadingOutlined spin /> : null}
 		/>
 	);
 }
+
+const ALL_SENTINEL = "__all__";
 
 interface FilterSelectProps extends Omit<SelectProps, "value" | "onChange" | "options" | "loading"> {
 	filter: string;
@@ -31,6 +33,7 @@ interface FilterSelectProps extends Omit<SelectProps, "value" | "onChange" | "op
 	defaultValue?: string | number | null;
 	valueKey?: string;
 	labelKey?: string;
+	allLabel?: string;
 }
 
 export function FilterSelect({
@@ -40,24 +43,30 @@ export function FilterSelect({
 	valueKey = "id",
 	labelKey = "name",
 	placeholder,
+	allLabel,
 	...props
 }: FilterSelectProps) {
 	const { value, isPending, handleChange } = useURLFilter(filter, 300);
 
+	const allOption = allLabel ? [{ value: ALL_SENTINEL, label: allLabel }] : [];
+
 	return (
 		<Select
 			{...props}
+			size="large"
 			showSearch
-			allowClear
 			placeholder={placeholder}
 			value={value !== null ? value : defaultValue}
-			onChange={handleChange}
+			onChange={(val) => handleChange(val === ALL_SENTINEL ? null : val)}
 			loading={isPending}
-			options={options.map((option) => ({
-				value: option[valueKey],
-				label: option[labelKey],
-			}))}
-			style={{ minWidth: 150, ...props.style }}
+			options={[
+				...allOption,
+				...options.map((option) => ({
+					value: option[valueKey],
+					label: option[labelKey],
+				})),
+			]}
+			style={{ ...props.style }}
 		/>
 	);
 }

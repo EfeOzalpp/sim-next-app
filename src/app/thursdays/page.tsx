@@ -61,24 +61,17 @@ export default async function Thursdays({ searchParams }: ThursdaysProps) {
         start={<h2>Thursdays</h2>}
         end={
           <>
-            {isAdmin && <Button href="/thursdays/add">Add Day</Button>}
             <FilterInput query={"thursdays"} />
             <FilterSelect
               filter={"semesterId"}
               options={semesters}
               defaultValue={semesterIdFilter || defaultSemesterId}
             />
+            {isAdmin && <Button href="/thursdays/add">Add Day</Button>}
           </>
         }
       />
-      <div
-        style={{
-          margin: "1rem",
-          padding: "1rem",
-          backgroundColor: "rgba(211, 211, 211, 0.75)",
-          borderRadius: "0.33rem",
-        }}
-      >
+      <div className={styles.resultsWrapper}>
         <ResultsContainer>
           <Suspense
             fallback={<div style={{ opacity: 0.5 }}>Loading days...</div>}

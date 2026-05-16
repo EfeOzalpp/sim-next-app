@@ -4,7 +4,6 @@ import { getAllSemesters } from "@/actions/semesters";
 import { Button } from "@/components/ui/AntD";
 import { FilterInput, FilterSelect } from "@/components/ui/Filters";
 import Split from "@/components/ui/Split";
-import ResultsContainer from "@/components/ui/ResultsContainer";
 
 import styles from "@/components/domain/users/Users.module.css";
 import UserCard from "@/components/domain/users/UserCard";
@@ -49,29 +48,21 @@ export default async function UsersPage({ searchParams }: UsersProps) {
 				start={<h2>Names & Faces</h2>}
 				end={
 					<>
-						{isAdmin && <Button href="/users/add">New User</Button>}
-						<FilterInput query={"user"} />
-						<FilterSelect 
-							filter={"semesterId"} 
-							options={semesters} 
-							defaultValue={semesterIdFilter || defaultSemesterId} 
+						<FilterInput query={"user"} placeholder="Search user"/>
+						<FilterSelect
+							filter={"semesterId"}
+							options={semesters}
+							defaultValue={semesterIdFilter || defaultSemesterId}
+							allLabel="All Semesters"
 						/>
+						{isAdmin && <Button href="/users/add">Add User</Button>}
 					</>
 				}
 			/>
-			<div
-				style={{
-					margin: "1rem",
-					padding: "1rem",
-					backgroundColor: "rgba(211, 211, 211, 0.75)",
-					borderRadius: "0.33rem",
-				}}
-			>
-				<ResultsContainer>
-					<Suspense fallback={<div style={{ opacity: 0.5 }}>Loading users...</div>}>
-						<UsersList filters={filters} />
-					</Suspense>
-				</ResultsContainer>
+			<div className={styles.resultsWrapper}>
+				<Suspense fallback={<div style={{ opacity: 0.5 }}>Loading users...</div>}>
+					<UsersList filters={filters} />
+				</Suspense>
 			</div>
 		</>
 	);

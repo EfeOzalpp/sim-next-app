@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import UserForm from "@/components/forms/user/UserForm";
 import { addUser, handleImageUpload, getAllSemesters } from "@/actions/users";
+import Split from "@/components/ui/Split";
+import CloseButton from "@/components/ui/CloseButton";
+import styles from "@/app/users/add/page.module.css";
 
 import { auth } from "@/authentication";
 
@@ -28,14 +31,22 @@ export default async function AddUser() {
 
 	if (isAdmin) {
 		return (
-			<div>
-				<h2>Add User</h2>
-				<UserForm 
-					onSubmit={onSubmitAddUser} 
-					isCurrentUserAdmin={isAdmin} 
-					allSemesters={semesters}
+			<>
+				<Split
+					className={styles.profileSplit}
+					start={<h2>Add New User</h2>}
+					end={<CloseButton href="/users" />}
 				/>
-			</div>
+				<div className={styles.pageWrapper}>
+					<div className="content-card">
+						<UserForm
+							onSubmit={onSubmitAddUser}
+							isCurrentUserAdmin={isAdmin}
+							allSemesters={semesters}
+						/>
+					</div>
+				</div>
+			</>
 		);
 	} else {
 		redirect("/users/");

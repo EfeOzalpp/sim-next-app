@@ -1,44 +1,51 @@
-.faceContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.UserCard {
   width: 100%;
-  gap: 0.25rem;
-  padding: 0.25rem;
+  padding: 0;
+  color: black;
+  text-decoration: none;
+  overflow: hidden;
 }
 
-.imageWrapper {
+.cardInner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.imageSection {
   position: relative;
-  width: 8rem;
-  height: 11rem;
+  width: 100%;
+  height: 12.6rem;
+  overflow: hidden;
+}
+
+.nameSection {
+  padding: 0.4rem 0.5rem;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.roleLabel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--neo-color);
+  color: #1a120b;
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .name {
-  text-align: center;
-  font-weight: bolder;
-  font-size: 1rem;
-}
-
-.role {
-  text-align: center;
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.UserCard {
-  background: linear-gradient(white, whitesmoke); /* white → light grey */
-  white-space: normal; /* allow wrapping */
-
-  padding: 0.1rem;
   color: black;
-  text-decoration: none;
-}
-
-.UserCardAdmin {
-  background: linear-gradient(white, lightcyan); /* white → light grey */
-  white-space: normal; /* allow wrapping */
-
-  padding: 0.1rem;
-  color: black;
-  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.85rem;
+  word-break: break-word;
 }

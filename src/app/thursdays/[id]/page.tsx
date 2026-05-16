@@ -5,6 +5,7 @@ import { getAuthSession } from "@/actions/auth";
 
 import ThursdayNavigation from "@/components/domain/thursdays/ThursdayNavigation";
 import ProductionCard from "@/components/domain/thursdays/ProductionCard";
+import ProductionsCollapse from "@/components/domain/thursdays/ProductionsCollapse";
 import Split from "@/components/ui/Split";
 import { Button } from "@/components/ui/AntD";
 import styles from "@/components/domain/thursdays/ThursdayPage.module.css";
@@ -30,52 +31,56 @@ export default async function Thursday({ params }: ThursdayProps) {
     : { previous: null, next: null };
 
   return (
-    <div className={styles.ThursdayPage}>
+    <>
+      <Split
+        start={<h2 style={{ margin: 0 }}>Thursday</h2>}
+        end={
+          isAdmin && (
+            <Button href={`/thursdays/${thursday.id}/edit`}>
+              Edit Thursday
+            </Button>
+          )
+        }
+      />
+
       <ThursdayNavigation previous={previous} next={next} />
 
-      <div className={styles.Header}>
-        <Split
-          start={
-            <div>
-              <h3 className={styles.DateTitle}>
-                {new Date(thursday.date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </h3>
-              <div className={styles.SemesterSubtitle}>
-                {thursday.name}, {(thursday as any).semester?.name}
-              </div>
-            </div>
-          }
-          end={
-            isAdmin && (
-              <Button href={`/thursdays/${thursday.id}/edit`}>
-                Edit Thursday
-              </Button>
-            )
-          }
-        />
-      </div>
+      <div className={styles.productions}>
+        <div className={styles.ThursdayInfo}>
+          <div className={styles.SemesterSubtitle}>
+            {thursday.name}, {(thursday as any).semester?.name}
+          </div>
+          <span className={styles.DateBadge}>
+            {new Date(thursday.date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
+        </div>
 
-      <div className={styles.Productions}>
         {thursday.productions.length > 0 ? (
-          thursday.productions.map((production: any) => (
-            <ProductionCard
-              key={production.id}
-              thursday={thursday as any}
-              production={production}
-              isAdmin={isAdmin}
-            />
-          ))
+          <ProductionsCollapse
+            formattedDate={new Date(thursday.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            productions={thursday.productions.map((production: any) => ({
+              id: production.id,
+              name: production.name,
+              location: production.location,
+              content: (
+                <ProductionCard
+                  thursday={thursday as any}
+                  production={production}
+                  isAdmin={isAdmin}
+                />
+              ),
+            }))}
+          />
         ) : (
           <div className={styles.NoProductions}>
             There are no productions scheduled on this Thursday yet.
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

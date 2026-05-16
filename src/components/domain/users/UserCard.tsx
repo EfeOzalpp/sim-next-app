@@ -10,27 +10,27 @@ interface UserCardProps {
 }
 
 export default function UserCard({ user }: UserCardProps) {
+  const roleLabel = user.role.charAt(0) + user.role.slice(1).toLowerCase();
+
   return (
     <Block
       as="a"
       href={`/users/${user.id}`}
-      className={`${user.role === "ADMIN" ? styles.UserCardAdmin : styles.UserCard} neo-pressable`}
+      className={`${styles.UserCard} neo-pressable neo-brutal-button`}
     >
-      <div className={`${styles.faceContent}`}>
-        <div className={styles.imageWrapper}>
+      <div className={styles.cardInner}>
+        <div className={styles.imageSection}>
           <Image
             src={normalizeFaceImagePath(user.image)}
             alt={`${user.name}'s face`}
             fill
-            style={{
-              objectFit: "cover",
-              borderRadius: "5px",
-              border: "2px solid #222222",
-            }}
+            style={{ objectFit: "cover" }}
           />
+          {user.role !== "STUDENT" && <span className={styles.roleLabel}>{roleLabel}</span>}
         </div>
-        <div className={styles.name}>{user.name}</div>
-        <div className={styles.role}>{user.role.charAt(0) + user.role.slice(1).toLowerCase()}</div>
+        <div className={styles.nameSection}>
+          <div className={styles.name}>{user.name}</div>
+        </div>
       </div>
     </Block>
   );

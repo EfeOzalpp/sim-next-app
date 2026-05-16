@@ -1,0 +1,12 @@
+.profileSplit {
+	--split-padding-x: 0;
+	max-width: 50%;
+	margin: 0 auto;
+	border-bottom: var(--neo-border);
+}
+
+.pageWrapper {
+	max-width: 50%;
+	margin: 0 auto;
+	padding: 0 0 1rem;
+}

@@ -2,7 +2,6 @@ import Link from "next/link";
 import styles from "@/components/domain/thursdays/PresentationCard.module.css";
 import { formatNiceListFromArray } from "@/helpers";
 import { Prisma } from "@prisma/client";
-import Block from "@/components/ui/Block";
 import clsx from "clsx";
 
 type PresentationWithPresenters = Prisma.PresentationGetPayload<{
@@ -43,21 +42,31 @@ export default function PresentationCard({
 
   const thursdayId = (presentation as any).production?.thursday_id;
 
+  if (!isUserProfile) {
+    return (
+      <div className={styles.Presentation}>
+        <div className={styles.PresentationInner}>
+          {presentation.about !== "" ? (
+            <div><i>{presentation.about}</i></div>
+          ) : null}
+          {authors.length > 0 ? (
+            <div className={styles.Authors}>{formatNiceListFromArray(authors)}</div>
+          ) : (
+            <div>No one is credited yet.</div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const content = (
     <div className={styles.PresentationInner}>
-      <div>
-        <b>{presentation.name}</b>
-      </div>
+      <div><b>{presentation.name}</b></div>
       {presentation.about !== "" ? (
-        <div>
-          <i>{presentation.about}</i>
-        </div>
+        <div><i>{presentation.about}</i></div>
       ) : null}
       {authors.length > 0 ? (
-        <div>
-          <> by </>
-          {formatNiceListFromArray(authors)}
-        </div>
+        <div className={styles.Authors}>{formatNiceListFromArray(authors)}</div>
       ) : (
         <div>No one is credited as an author of this presentation yet.</div>
       )}
@@ -65,13 +74,11 @@ export default function PresentationCard({
   );
 
   return (
-    <Block
-      as={isUserProfile ? Link : "div"}
-      href={isUserProfile && thursdayId ? `/thursdays/${thursdayId}` : undefined}
-      className={clsx(styles.Presentation, isUserProfile && styles.GreyButton)}
-      pressable={isUserProfile}
+    <Link
+      href={thursdayId ? `/thursdays/${thursdayId}` : "#"}
+      className={clsx(styles.Presentation, styles.GreyButton)}
     >
       {content}
-    </Block>
+    </Link>
   );
 }

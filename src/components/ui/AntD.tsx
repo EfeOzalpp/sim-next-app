@@ -1,6 +1,5 @@
 "use client";
 
-import React, { ReactNode } from "react";
 import {
 	Input as AntInput,
 	Select as AntSelect,
@@ -51,7 +50,7 @@ export function Button({ href, onClick, children, type, htmlType, className, ...
 			onClick={onClick as any} 
 			htmlType={finalHtmlType} 
 			type={finalType as any} 
-			className={clsx(!className?.includes("GreyButton") && "neo-orange", className)}
+			className={clsx(!className?.includes("GreyButton") && !className?.includes("neo-green") && !className?.includes("neo-red") && "neo-orange", "neo-brutal-button", className)}
 			{...props} 
 			pressable={true}
 		>
@@ -62,19 +61,19 @@ export function Button({ href, onClick, children, type, htmlType, className, ...
 
 export function Input(props: InputProps) {
 	return (
-		<Block as={AntInput} className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
+		<Block as={AntInput} size="large" className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
 	);
 }
 
 export function TextArea(props: any) {
 	return (
-		<Block as={AntInput.TextArea} className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
+		<Block as={AntInput.TextArea} size="large" className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
 	);
 }
 
 export function Select(props: SelectProps) {
 	return (
-		<Block as={AntSelect} className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
+		<Block as={AntSelect} size="large" className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
 	);
 }
 
@@ -86,7 +85,7 @@ export function DatePicker(props: DatePickerProps) {
 
 export function RangePicker(props: RangePickerProps) {
 	return (
-		<Block as={AntDatePicker.RangePicker} className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
+		<Block as={AntDatePicker.RangePicker} size="large" className="neo-brutal-input" variant="borderless" {...props} pressable={true} />
 	);
 }
 
@@ -154,15 +153,15 @@ export function Modal({ children, ...props }: ModalProps) {
 					{modal}
 				</div>
 			)}
-			okButtonProps={{ 
-				className: "neo-brutal neo-pressable neo-orange", 
-				style: { border: "none" }, 
-				...props.okButtonProps 
+			okButtonProps={{
+				className: "neo-brutal-button neo-pressable neo-orange",
+				style: { border: "none" },
+				...props.okButtonProps
 			}}
-			cancelButtonProps={{ 
-				className: "neo-brutal neo-pressable", 
-				style: { background: "white", color: "#222", border: "none" }, 
-				...props.cancelButtonProps 
+			cancelButtonProps={{
+				className: "neo-brutal-button neo-pressable neo-orange",
+				style: { border: "none" },
+				...props.cancelButtonProps
 			}}
 		>
 			{children}

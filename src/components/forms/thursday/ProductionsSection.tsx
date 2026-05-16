@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-import { useFieldArray, Control, useWatch } from "react-hook-form";
+import { useState } from "react";
+import { useFieldArray, useWatch } from "react-hook-form";
 import { Empty } from "antd";
-import { Card, Button, Collapse } from "@/components/ui/AntD";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Collapse, Modal } from "@/components/ui/AntD";
+import { DeleteOutlined } from "@ant-design/icons";
 import ProductionForm from "@/components/forms/thursday/ProductionForm";
 import { BasicUser, ProductionInput } from "@/components/forms/schemas";
 
@@ -22,15 +22,19 @@ export default function ProductionsSection({
     name: "productions",
   });
 
-  const watchProductions = useWatch({
-    control,
-    name: "productions",
-  });
+  const watchProductions = useWatch({ control, name: "productions" });
+  const thursdayDate = useWatch({ control, name: "date" });
+
+  const formattedDate = thursdayDate
+    ? new Date(thursdayDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : null;
+
+  const [pendingRemoveIndex, setPendingRemoveIndex] = useState<number | null>(null);
 
   return (
-    <Card
-      title="Productions"
-      extra={
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+        <strong style={{ fontSize: "14px" }}>Productions</strong>
         <Button
           type="primary"
           onClick={() =>
@@ -44,8 +48,8 @@ export default function ProductionsSection({
         >
           Add Production
         </Button>
-      }
-    >
+      </div>
+
       {fields.length === 0 ? (
         <Empty
           description="No productions yet."
@@ -53,21 +57,25 @@ export default function ProductionsSection({
         />
       ) : (
         <Collapse
+          defaultActiveKey={fields.map((f: any) => f.id)}
           items={fields.map((field: any, pIndex) => {
             const name = watchProductions?.[pIndex]?.name;
-            const label = name 
-              ? `Production ${pIndex + 1}: ${name}`
-              : `Unnamed Production ${pIndex + 1}`;
-            
+            const displayName = name || `Unnamed Production ${pIndex + 1}`;
+            const label = (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                {displayName}{formattedDate && ` (${formattedDate})`}
+              </span>
+            );
+
             return {
               key: field.id,
               label,
               extra: (
                 <DeleteOutlined
-                  style={{ color: "#ff4d4f" }}
+                  style={{ color: "#cf1322" }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    remove(pIndex);
+                    setPendingRemoveIndex(pIndex);
                   }}
                 />
               ),
@@ -82,6 +90,22 @@ export default function ProductionsSection({
           })}
         />
       )}
-    </Card>
+
+      <Modal
+        title="Remove Production"
+        open={pendingRemoveIndex !== null}
+        onOk={() => {
+          if (pendingRemoveIndex !== null) remove(pendingRemoveIndex);
+          setPendingRemoveIndex(null);
+        }}
+        onCancel={() => setPendingRemoveIndex(null)}
+        okText="Confirm Delete"
+        okButtonProps={{ className: "neo-brutal-button neo-pressable neo-red", style: { border: "none" } }}
+        cancelText="Cancel"
+      >
+        <p><strong>Are you sure you want to remove this production?</strong></p>
+        <p>This action cannot be undone.</p>
+      </Modal>
+    </div>
   );
 }

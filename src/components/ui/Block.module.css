@@ -1,7 +1,7 @@
 .wrapper {
 	position: relative;
 	display: inline-flex;
-	padding-top: var(--neo-depth);
+	vertical-align: top;
 	box-sizing: border-box;
 }
 

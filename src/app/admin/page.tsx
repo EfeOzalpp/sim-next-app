@@ -4,6 +4,7 @@ import Split from "@/components/ui/Split";
 import { getAllSemesters, getAdminSemesterData } from "@/actions/semesters";
 import SemesterUsersTable from "@/components/domain/semesters/SemesterUsersTable";
 import ResultsContainer from "@/components/ui/ResultsContainer";
+import styles from "@/app/admin/page.module.css";
 
 interface AdminProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -45,16 +46,10 @@ export default async function Admin({ searchParams }: AdminProps) {
   return (
     <>
       <Split
-        start={
-          <h2>
-            Manage Semester "{semesterData?.semester?.name}" (
-            {startDate?.toLocaleDateString()} - {endDate?.toLocaleDateString()})
-          </h2>
-        }
+        start={<h2>Manage Semester</h2>}
         end={
           <>
-            <Button href="/admin/semesters/add">New Semester</Button>
-
+            <FilterInput query="user" placeholder="Search" />
             <FilterSelect
               filter="semesterId"
               options={semesters}
@@ -62,6 +57,7 @@ export default async function Admin({ searchParams }: AdminProps) {
               valueKey="id"
               labelKey="name"
             />
+            <Button href="/admin/semesters/add">New Semester</Button>
             {semesterId && (
               <Button href={`/admin/semesters/${semesterId}/edit`}>
                 Edit {semesterData?.semester?.name}
@@ -72,15 +68,29 @@ export default async function Admin({ searchParams }: AdminProps) {
       />
 
       <Split
-        start={<h4>Manage Users</h4>}
-        end={<FilterInput query="user" placeholder="Search" />}
-      ></Split>
-      <ResultsContainer>
-        <SemesterUsersTable
-          semester={semesterData?.semester}
-          users={semesterData?.users || []}
-        />
-      </ResultsContainer>
+        className={styles.infoBar}
+        start={
+          <span className={styles.viewingLabel}>
+            {semesterData?.semester?.name}
+          </span>
+        }
+        end={
+          startDate && endDate ? (
+            <span className={styles.dateBadge}>
+              {startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} — {endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            </span>
+          ) : null
+        }
+      />
+
+      <div className={styles.tableWrapper}>
+        <ResultsContainer>
+          <SemesterUsersTable
+            semester={semesterData?.semester}
+            users={semesterData?.users || []}
+          />
+        </ResultsContainer>
+      </div>
     </>
   );
 }

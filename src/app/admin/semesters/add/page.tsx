@@ -1,8 +1,10 @@
 import SemesterForm from "@/components/forms/semester/SemesterForm";
-
 import { getAllSemesters, addSemester } from "@/actions/semesters";
 import { getAllUsers } from "@/actions/users";
 import { redirect } from "next/navigation";
+import Split from "@/components/ui/Split";
+import CloseButton from "@/components/ui/CloseButton";
+import styles from "@/app/admin/semesters/add/page.module.css";
 
 export default async function AddSemester() {
 	const semestersResult = await getAllSemesters();
@@ -23,9 +25,21 @@ export default async function AddSemester() {
 	}
 
 	return (
-		<div>
-			<h1>Add Semester</h1>
-			<SemesterForm onSubmit={onSubmitAddSemester} usersFromCurrentSemester={usersFromCurrentSemester} users={users} />
-		</div>
+		<>
+			<Split
+				className={styles.profileSplit}
+				start={<h2>Add Semester</h2>}
+				end={<CloseButton href="/admin" />}
+			/>
+			<div className={styles.pageWrapper}>
+				<div className="content-card">
+					<SemesterForm
+						onSubmit={onSubmitAddSemester}
+						usersFromCurrentSemester={usersFromCurrentSemester}
+						users={users}
+					/>
+				</div>
+			</div>
+		</>
 	);
 }

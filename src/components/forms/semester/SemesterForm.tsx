@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Space, Typography } from "antd";
 import {
   Input,
   RangePicker,
+  Select,
   Card,
   Button,
   Alert,
-  UserTransfer,
 } from "@/components/ui/AntD";
 import {
   transformSemesterFromAPI,
@@ -59,6 +59,7 @@ export default function SemesterForm({
 
   const [error, setError] = useState<string | null>(null);
 
+
   const handleFormSubmit = async (data: SemesterFormValues) => {
     const payload = transformSemesterPayload(data);
     await handleFormAction(
@@ -73,7 +74,6 @@ export default function SemesterForm({
       <Space orientation="vertical" size="large" style={{ width: "100%" }}>
         {error && (
           <Alert
-            message="Error"
             description={error}
             type="error"
             showIcon
@@ -124,28 +124,78 @@ export default function SemesterForm({
           </div>
 
           <div>
-            <Text strong style={{ display: "block", marginBottom: "8px" }}>Select Users</Text>
             <Controller
               control={control}
               name="users"
               render={({ field }) => (
-                <UserTransfer
-                  users={users}
-                  selectedUserKeys={field.value}
-                  setSelectedUserKeys={(nextTargetKeys) =>
-                    field.onChange(nextTargetKeys)
+                <>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
+                    <Text strong>Select Users</Text>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange(users.map((u) => u.id))}
+                        style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: "0.8rem", color: "#15803d", fontWeight: 600 }}
+                      >
+                        Select all
+                      </button>
+                      <span style={{ color: "#ccc", fontWeight: 300, userSelect: "none" }}>|</span>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange([])}
+                        style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: "0.8rem", color: "#cf1322", fontWeight: 600 }}
+                      >
+                        Unselect all
+                      </button>
+                    </div>
+                  </div>
+                  <Select
+                  {...field}
+                  mode="multiple"
+                  showSearch
+                  maxTagCount={12}
+                  maxTagPlaceholder={(omitted) => `+${omitted.length} more users`}
+                  placeholder="Search and select users..."
+                  style={{ width: "100%" }}
+                  filterOption={(input, option) =>
+                    (option?.label as string)?.toLowerCase().includes(input.toLowerCase())
                   }
+                  options={[...users]
+                    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                    .map((u) => ({ value: u.id, label: u.name ?? "Unnamed User" }))}
+                  optionRender={(option) => {
+                    const isSelected = (field.value ?? []).includes(option.value as string);
+                    return (
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span style={{
+                          fontSize: "0.65rem",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          padding: "2px 6px",
+                          borderRadius: "3px",
+                          flexShrink: 0,
+                          background: isSelected ? "#dcfce7" : "#fff2f0",
+                          color: isSelected ? "#15803d" : "#cf1322",
+                        }}>
+                          {isSelected ? "Selected" : "Unselected"}
+                        </span>
+                        <span style={{ fontWeight: 600 }}>{option.label}</span>
+                      </div>
+                    );
+                  }}
                 />
+                </>
               )}
             />
           </div>
         </Space>
 
-        <Button type="submit" disabled={isSubmitting} style={{ width: "100%" }}>
+        <Button type="submit" disabled={isSubmitting} className="neo-green" style={{ width: "100%" }}>
           {isSubmitting
             ? "Saving..."
             : semester
-              ? "Update Semester"
+              ? "Save Changes"
               : "Create Semester"}
         </Button>
 

@@ -4,27 +4,31 @@ html,
 body {
   font-family: Verdana, Arial, "Jost", serif;
   margin: 0;
-  background: linear-gradient(white, whitesmoke);
+  background: var(--primary-bg);
   background-attachment: fixed;
   color: #1a120b;
 
-  --neo-border: 2px solid #222222;
-  --neo-shadow-color: #222222;
+  /* padding */
+  --section-padding: 0rem 6rem 4rem;
+
+  /* colors */
+  --primary-bg: rgb(255, 255, 255);
+  --secondary-bg: linear-gradient(#ffa97a, #ffac78);
+  --neo-border: 2px solid #797979;
+  --neo-border-bold: 2px solid #333333;
+  --neo-shadow-color: #808080;
   --neo-depth: 2px;
-  --neo-radius: 5px;
+  --neo-radius: 6px;
   --neo-color-text: #1a120b;
-  --neo-color-orange: #f26419;
-  --neo-color-orange-light: #f58a2a;
-  --neo-color-white: whitesmoke;
+  --neo-color: #ffffff;
+  --neo-color-light: #ffffff00;
+  --neo-color-input-2: rgb(255, 255, 255);
   --neo-color-grey: lightgrey;
   --neo-bg-orange: linear-gradient(
-    var(--neo-color-orange-light),
-    var(--neo-color-orange)
+    var(--neo-color-light),
+    var(--neo-color)
   );
-  --neo-bg-white: linear-gradient(
-    var(--neo-color-white),
-    var(--neo-color-grey)
-  );
+  --neo-bg-white: var(--neo-color-input-2)
 }
 
 a {
@@ -36,18 +40,52 @@ a {
   position: relative;
   border: var(--neo-border) !important;
   border-radius: var(--neo-radius) !important;
-  box-shadow: 0 var(--neo-depth) 0 0 var(--neo-shadow-color) !important;
   transform: translateY(calc(-1 * var(--neo-depth)));
 }
 
+.neo-brutal-button {
+  border: var(--neo-border-bold) !important;
+}
+
+nav .neo-orange {
+  box-shadow: inset -5px -4px 0px #ffa587 !important;
+}
 .neo-orange {
-  background: var(--neo-bg-orange) !important;
-  color: white !important;
+  background: var(--neo-color) !important;
+  color: rgb(69, 38, 20) !important;
   font-weight: bold !important;
+  border-radius: 16px !important;
+  box-shadow: inset -5px -4px 0px #b9b9b9 !important;
 }
 
 .neo-orange:hover {
   color: black !important;
+}
+
+/* for update buttons etc */
+.neo-green {
+  background: var(--neo-color) !important;
+  color: #18793b !important;
+  font-weight: bold !important;
+  border-radius: 16px !important;
+  box-shadow: inset -5px -3px 0px #82ce9e !important;
+}
+
+.neo-green:hover {
+  color: #219b4e !important;
+}
+
+/* for delete/destructive buttons */
+.neo-red {
+  background: var(--neo-color) !important;
+  color: #cf1322 !important;
+  font-weight: bold !important;
+  border-radius: 16px !important;
+  box-shadow: inset -5px -3px 0px #ffa39e !important;
+}
+
+.neo-red:hover {
+  color: #a8071a !important;
 }
 
 .neo-pressable {
@@ -79,13 +117,185 @@ a {
 .neo-table .ant-table-thead > tr > th {
   background: var(--neo-bg-white) !important;
   border-bottom: var(--neo-border) !important;
+  border-right: var(--neo-border) !important;
   font-weight: bold !important;
 }
 
+.neo-table .ant-table-thead > tr > th:last-child {
+  border-right: none !important;
+}
+
 .neo-table .ant-table-tbody > tr > td {
-  border-bottom: 1px solid #ddd !important;
+  border-bottom: var(--neo-border) !important;
 }
 
 .neo-table .ant-table-tbody > tr:last-child > td {
   border-bottom: none !important;
+}
+
+.neo-table .ant-table-tbody > tr:hover > td {
+  background: transparent !important;
+}
+
+.neo-table .ant-table-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
+
+/* dropdown: pure white background (vs whitesmoke for text inputs) */
+.neo-brutal-input.ant-select,
+.neo-brutal-input.ant-select .ant-select-selector {
+  background: var(--neo-color) !important;
+  min-width: 180px;
+}
+
+.neo-brutal-input.ant-select:not(.ant-select-multiple) {
+  height: 44px !important;
+}
+
+.neo-brutal-input.ant-select:not(.ant-select-multiple) .ant-select-selector {
+  height: 44px !important;
+  line-height: 44px !important;
+}
+
+.ant-select-multiple {
+  padding: 6px !important;
+  height: auto !important;
+}
+
+.ant-select-multiple .ant-select-selector {
+  height: auto !important;
+  align-items: flex-start !important;
+  padding: 4px 8px !important;
+  overflow: visible !important;
+}
+
+.ant-select-multiple .ant-select-selection-overflow {
+  overflow: visible !important;
+  flex-wrap: wrap !important;
+}
+
+.ant-select-multiple .ant-select-selection-item {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border-color: #86efac !important;
+}
+
+
+@media (max-width: 768px) {
+  .neo-brutal-input.ant-select,
+  .neo-brutal-input.ant-input-affix-wrapper,
+  .neo-brutal-input.ant-input {
+    width: 100% !important;
+    min-width: unset !important;
+  }
+}
+
+.ant-select .ant-select-suffix {
+  color: #222222 !important;
+  font-size: 0.75rem !important;
+}
+
+.neo-brutal-input.ant-picker {
+  height: 44px !important;
+}
+
+.ant-picker-suffix {
+  color: #222222 !important;
+}
+
+
+.ant-modal .ant-modal-content {
+  box-shadow: none !important;
+}
+
+.ant-modal-close:hover {
+  background: transparent !important;
+}
+
+.ant-collapse .ant-collapse-header {
+  align-items: center !important;
+}
+
+.ant-collapse .ant-collapse-content {
+  border-top: 1px solid #f0f0f0 !important;
+}
+
+.ant-select-dropdown,
+.ant-picker-dropdown .ant-picker-panel-container {
+  border: var(--neo-border) !important;
+  border-radius: var(--neo-radius) !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.ant-select-item {
+  border-radius: 0 !important;
+  padding: 10px 12px !important;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-selected) {
+  background-color: var(--primary-bg) !important;
+}
+
+.ant-select-item-option-state {
+  display: none !important;
+}
+
+.ant-select-item-option-selected {
+  background: #f0fdf4 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #555 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* search bar related styles */
+.neo-brutal-input.ant-input-affix-wrapper {
+  border-radius: 6px !important;
+  height: 44px !important;
+}
+
+
+.neo-brutal-input.ant-input-affix-wrapper input::placeholder {
+  color: #555 !important;
+  opacity: 1;
+  font-weight: 600 !important;
+}
+
+
+.ant-typography-secondary {
+  color: #555 !important;
+}
+
+.ant-typography-secondary i {
+  display: block;
+  padding: 0.4rem 0;
+}
+
+.content-card {
+  background: rgb(255, 255, 255);
+  padding: 1em 0em 2em 0em;
+}
+
+.ant-card {
+  border-radius: var(--neo-radius) !important;
+}
+
+.ant-space-vertical > .ant-space-item {
+  width: 100%;
+}
+
+div:has(> textarea.neo-brutal) {
+  width: 100%;
+  display: flex;
+}
+
+form div[class*="wrapper"]:has(> .neo-brutal-input) {
+  width: 100%;
+  display: block;
 }

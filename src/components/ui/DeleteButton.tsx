@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Modal } from "@/components/ui/AntD";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface DeleteButtonProps {
   onConfirm: () => void;
@@ -30,10 +30,6 @@ export default function DeleteButton({
     <div style={{ marginTop: "1rem" }}>
       <Button
         onClick={showModal}
-        style={{
-          background: "#ff4d4f",
-          color: "white",
-        }}
       >
         {buttonText} {itemName}
       </Button>
@@ -44,7 +40,7 @@ export default function DeleteButton({
         onOk={handleConfirm}
         onCancel={handleCancel}
         okText="Confirm Delete"
-        okButtonProps={{ danger: true }}
+        okButtonProps={{ className: "neo-brutal-button neo-pressable neo-red", style: { border: "none" } }}
         cancelText="Cancel"
       >
         <p>
